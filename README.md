@@ -32,10 +32,10 @@ $sudo docker-compose exec --user=laradock workspace bash<br>
 $php composer install<br>
 $php artisan migrate<br>
 
-Para logar no projeto utilize 
-http://localhost:8002 
-Login: eplax@eplax.com 
-senha: eplax 
+Para logar no projeto utilize <br>
+http://localhost:8002 <br>
+Login: admin@admin.com <br>
+senha: admin <br>
 
 
 
