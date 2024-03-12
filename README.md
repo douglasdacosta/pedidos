@@ -1,6 +1,6 @@
-
-Entre no progeto e rode<br>
+Clone o projeto <br>
 <br>
+git clone https://github.com/douglasdacosta/pedidos.git<br>
 Dentro do diretório laradock<br>
 <br>
 $cd laradock<br>
