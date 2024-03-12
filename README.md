@@ -1,10 +1,7 @@
-intalando ambiente docker<br>
-docker pull php:8.3.1-apache<br>
-docker pull php:7.2.34-apache<br>
+
+Entre no progeto e rode<br>
 <br>
-Depois de cloando entre no progeto e rode<br>
-<br>
-Dentro do diretório<br>
+Dentro do diretório laradock<br>
 <br>
 $cd laradock<br>
 <br>
