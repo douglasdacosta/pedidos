@@ -3,6 +3,10 @@ Clone o projeto <br>
 git clone https://github.com/douglasdacosta/pedidos.git<br>
 Dentro do diretório laradock<br>
 <br>
+$cd pedidos<br>
+<br>
+Adicione o Laradock<br>
+git clone https://github.com/laradock/laradock.git<br>
 $cd laradock<br>
 <br>
 $sudo docker-compose up -d nginx mysql phpmyadmin<br>
