@@ -8,6 +8,12 @@ $cd pedidos<br>
 Adicione o Laradock<br>
 git clone https://github.com/laradock/laradock.git<br>
 $cd laradock<br>
+$ cp .env.example .env<br>
+Na .env altere a linha (Evita conflito com o do S.O.)<br>
+WORKSPACE_SSH_PORT=9999<br>
+NGINX_HOST_HTTP_PORT=8002<br>
+NGINX_HOST_HTTPS_PORT=4433<br>
+MYSQL_DATABASE=pedidos<br>
 <br>
 $sudo docker-compose up -d nginx mysql phpmyadmin<br>
 <br>
