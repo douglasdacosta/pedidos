@@ -63,12 +63,12 @@ return [
     |
     */
 
-    'logo' => '<b>Pro</b> Effect',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+    'logo' => '<b>ondarc</b>',
+    'logo_img' => 'vendor/adminlte/dist/img/mondarc.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'Pro Effect',
+    'logo_img_alt' => '4M Tech Solutions',
 
     /*
     |--------------------------------------------------------------------------
@@ -86,7 +86,7 @@ return [
     'auth_logo' => [
         'enabled' => false,
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            'path' => 'vendor/adminlte/dist/img/mondarc.png',
             'alt' => 'Auth Logo',
             'class' => '',
             'width' => 50,
@@ -109,7 +109,7 @@ return [
     'preloader' => [
         'enabled' => true,
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            'path' => 'vendor/adminlte/dist/img/mondarc.png',
             'alt' => 'AdminLTE Preloader Image',
             'effect' => 'animation__shake',
             'width' => 60,
@@ -323,37 +323,9 @@ return [
             'label_color' => '',
         ],
         [
-            'text'        => 'Followup',
-            'url'         => 'followup',
+            'text'        => 'Status Pedido',
+            'url'         => 'status_pedidos',
             'icon'        => 'far fa-fw fa-calendar',
-            'label'       => '',
-            'label_color' => '',
-        ],
-        [
-            'text'        => 'Materiais',
-            'url'         => 'materiais',
-            'icon'        => 'far fa-fw fa-file',
-            'label'       => '',
-            'label_color' => '',
-        ],
-        [
-            'text'        => 'Consumo Materiais',
-            'url'         => 'consumo-materiais',
-            'icon'        => 'far fa-fw fa-file',
-            'label'       => '',
-            'label_color' => '',
-        ],
-        [
-            'text'        => 'Ficha técnica',
-            'url'         => 'fichatecnica',
-            'icon'        => 'far fa-fw fa-file',
-            'label'       => '',
-            'label_color' => '',
-        ],
-        [
-            'text'        => 'Status',
-            'url'         => 'status',
-            'icon'        => 'far fa-fw fa-file',
             'label'       => '',
             'label_color' => '',
         ],
@@ -365,12 +337,40 @@ return [
             'label_color' => '',
         ],
         [
-            'text'        => 'Maquinas',
-            'url'         => 'maquinas',
+            'text'        => 'Materiais',
+            'url'         => 'materiais',
             'icon'        => 'far fa-fw fa-file',
             'label'       => '',
             'label_color' => '',
         ],
+        // [
+        //     'text'        => 'Consumo Materiais',
+        //     'url'         => 'consumo-materiais',
+        //     'icon'        => 'far fa-fw fa-file',
+        //     'label'       => '',
+        //     'label_color' => '',
+        // ],
+        // [
+        //     'text'        => 'Ficha técnica',
+        //     'url'         => 'fichatecnica',
+        //     'icon'        => 'far fa-fw fa-file',
+        //     'label'       => '',
+        //     'label_color' => '',
+        // ],
+        // [
+        //     'text'        => 'Status',
+        //     'url'         => 'status',
+        //     'icon'        => 'far fa-fw fa-file',
+        //     'label'       => '',
+        //     'label_color' => '',
+        // ],
+        // [
+        //     'text'        => 'Maquinas',
+        //     'url'         => 'maquinas',
+        //     'icon'        => 'far fa-fw fa-file',
+        //     'label'       => '',
+        //     'label_color' => '',
+        // ],
         // [
         //     'text'        => 'Relatório produção',
         //     'url'         => 'relatorio-producao',
