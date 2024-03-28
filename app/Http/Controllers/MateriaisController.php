@@ -32,11 +32,6 @@ class MateriaisController extends Controller
         $codigo = !empty($request->input('codigo')) ? ($request->input('codigo')) : ( !empty($codigo) ? $codigo : false );
 
 
-        $pedidos = DB::table('categoria');
-        $pedidos = $pedidos->where('categoria.id', '=', '1');
-        $pedidos = $pedidos->get();
-
-        dd($pedidos);
         $materiais = new Materiais();
 
         if ($id) {
@@ -55,7 +50,6 @@ class MateriaisController extends Controller
         }
 
         $materiais = $materiais->get();
-        dd($materiais);
         $tela = 'pesquisa';
     	$data = array(
 				'tela' => $tela,

@@ -336,9 +336,16 @@ return [
             'label'       => '',
             'label_color' => '',
         ],
+        // [
+        //     'text'        => 'Materiais',
+        //     'url'         => 'materiais',
+        //     'icon'        => 'far fa-fw fa-file',
+        //     'label'       => '',
+        //     'label_color' => '',
+        // ],
         [
-            'text'        => 'Materiais',
-            'url'         => 'materiais',
+            'text'        => 'Categorias',
+            'url'         => 'categorias',
             'icon'        => 'far fa-fw fa-file',
             'label'       => '',
             'label_color' => '',

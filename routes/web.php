@@ -22,9 +22,14 @@ Auth::routes(['register' => false, 'reset' => false]);
 Route::get('admin/settings', [App\Http\Controllers\SettingsController::class, 'index'])->name('settings');
 Route::post('admin/alterar-senha', [App\Http\Controllers\SettingsController::class, 'edit'])->name('alterar-senha');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
 Route::match(['get', 'post'],'/materiais', [App\Http\Controllers\MateriaisController::class, 'index'])->name('materiais');
 Route::match(['get', 'post'],'/alterar-materiais', [App\Http\Controllers\MateriaisController::class, 'alterar'])->name('alterar-materiais');
 Route::match(['get', 'post'],'/incluir-materiais', [App\Http\Controllers\MateriaisController::class, 'incluir'])->name('incluir-materiais');
+
+Route::match(['get', 'post'],'/categorias', [App\Http\Controllers\CategoriasController::class, 'index'])->name('categorias');
+Route::match(['get', 'post'],'/alterar-categorias', [App\Http\Controllers\CategoriasController::class, 'alterar'])->name('alterar-categorias');
+Route::match(['get', 'post'],'/incluir-categorias', [App\Http\Controllers\CategoriasController::class, 'incluir'])->name('incluir-categorias');
 
 Route::match(['get', 'post'],'/clientes', [App\Http\Controllers\PessoasController::class, 'index'])->name('clientes');
 Route::match(['get', 'post'],'/alterar-clientes', [App\Http\Controllers\PessoasController::class, 'alterar'])->name('alterar-clientes');
@@ -64,5 +69,3 @@ Route::match(['get', 'post'],'/orcamentos', [App\Http\Controllers\OrcamentosCont
 Route::match(['get', 'post'],'/alterar-orcamentos', [App\Http\Controllers\OrcamentosController::class, 'alterar'])->name('alterar-orcamentos');
 
 Route::match(['get', 'post'],'/teste', [App\Http\Controllers\TestesController::class, 'index'])->name('teste');
-
-
