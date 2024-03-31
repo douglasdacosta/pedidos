@@ -350,6 +350,13 @@ return [
             'label'       => '',
             'label_color' => '',
         ],
+        [
+            'text'        => 'Produtos',
+            'url'         => 'produtos',
+            'icon'        => 'far fa-fw fa-file',
+            'label'       => '',
+            'label_color' => '',
+        ],
         // [
         //     'text'        => 'Consumo Materiais',
         //     'url'         => 'consumo-materiais',

@@ -80,7 +80,7 @@ class CategoriasController extends Controller
 				'rotaAlterar' => 'alterar-categorias'
 			);
 
-        return view('materiais', $data);
+        return view('categorias', $data);
     }
 
      /**
@@ -114,23 +114,14 @@ class CategoriasController extends Controller
 
         return view('categorias', $data);
     }
-
     public function salva($request, $historico = null) {
 
-        $id = DB::transaction(function () use ($request, $historico) {
-
-            $categorias = new Categorias();
-
-            if(!empty($request->input('id'))) {
-                $categorias = $categorias::find($request->input('id'));
-            }
-            $categorias->nome = $request->input('nome');
-            $categorias->save();
-
+        $categorias = new Categorias();
+        if(!empty($request->input('id'))) {
+            $categorias = $categorias::find($request->input('id'));
+        }
+        $categorias->nome = $request->input('nome');
+        $categorias->save();
         return $categorias->id;
-    });
-
-    return $id;
-
-}
+    }
 }

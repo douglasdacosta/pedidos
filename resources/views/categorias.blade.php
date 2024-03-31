@@ -110,6 +110,9 @@
                 <div class="col-sm-5">
                     <button type="submit" class="btn btn-primary">Salvar</button>
                 </div>
+                <!-- <div class="col-sm-2 text-right">
+                    <button class="btn btn-danger">Excluir</button>
+                </div> -->
             </div>
         </form>
 
