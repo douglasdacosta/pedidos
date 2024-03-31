@@ -30,7 +30,7 @@ class CategoriasController extends Controller
     {
         $id = !empty($request->input('id')) ? ($request->input('id')) : ( !empty($id) ? $id : false );
         $nome = !empty($request->input('nome')) ? ($request->input('nome')) : ( !empty($nome) ? $nome : false );
-
+        
         $categorias = new Categorias();
 
         if ($id) {
@@ -41,9 +41,6 @@ class CategoriasController extends Controller
         	$categorias = $categorias->where('nome', 'like', '%'.$request->input('nome').'%');
         }
 
-        if (!empty($request->input('status'))){
-            $categorias = $categorias = $categorias->where('status', '=', $request->input('status'));
-        }
         $categorias = $categorias->get();
         
         $tela = 'pesquisa';
@@ -95,24 +92,15 @@ class CategoriasController extends Controller
     {
 
         $categorias = new Categorias();
-        $historico = '';
 
         $categorias= $categorias->where('id', '=', $request->input('id'))->get();
 
 		$metodo = $request->method();
 		if ($metodo == 'POST') {
-
-            if($categorias[0]->valor != DateHelpers::formatFloatValue($request->input('valor'))) {
-                DateHelpers::formatDate_dmY($request->input("data_entrega"));
-                $historico = "Valor do material alterado  de ". number_format($categorias[0]->valor, 2, ',', '') . " para " . $request->input('valor');
-
-            }
-    		$categoria_id = $this->salva($request, $historico);
-
+    		$categoria_id = $this->salva($request, $categorias);
 	    	return redirect()->route('categorias', [ 'id' => $categoria_id ] );
 
     	}
-        $historicos = HistoricosMateriais::where('categorias_id','=', $categorias[0]->id)->get();
 
         $tela = 'alterar';
     	$data = array(
@@ -120,7 +108,6 @@ class CategoriasController extends Controller
                 'nome_tela' => 'categorias',
 				'categorias'=> $categorias,
 				'request' => $request,
-                'historicos'=> $historicos,
 				'rotaIncluir' => 'incluir-categorias',
 				'rotaAlterar' => 'alterar-categorias'
 			);
@@ -132,35 +119,15 @@ class CategoriasController extends Controller
 
         $id = DB::transaction(function () use ($request, $historico) {
 
-            $materiais = new Materiais();
-            $tempo_torre = '00:00:00';
-            if(!empty($request->input('tempo_montagem_torre'))) {
-                $tempo_torre = '00:'.$request->input('tempo_montagem_torre');
-            }
+            $categorias = new Categorias();
 
-            if($request->input('id')) {
-                $materiais = $materiais::find($request->input('id'));
+            if(!empty($request->input('id'))) {
+                $categorias = $categorias::find($request->input('id'));
             }
-            $materiais->codigo = $request->input('codigo');
-            $materiais->material = $request->input('material');
-            $materiais->espessura = $request->input('espessura');
-            $materiais->unidadex = $request->input('unidadex');
-            $materiais->unidadey = $request->input('unidadey');
-            $materiais->peca_padrao = $request->input('peca_padrao');
-            $materiais->tempo_montagem_torre = $tempo_torre;
-            $materiais->valor = DateHelpers::formatFloatValue($request->input('valor'));
-            $materiais->status = $request->input('status');
-            $materiais->save();
+            $categorias->nome = $request->input('nome');
+            $categorias->save();
 
-            if(!empty($historico)) {
-                $historicos = new HistoricosMateriais();
-                $historicos->materiais_id = $materiais->id;
-                $historicos->historico = $historico;
-                $historicos->status = 'A';
-                $historicos->save();
-            }
-
-        return $materiais->id;
+        return $categorias->id;
     });
 
     return $id;

@@ -83,8 +83,9 @@
                 <h1 class="m-0 text-dark">Alteração de {{ $nome_tela }}</h1>
             @stop
             <form id="alterar" action="{{$rotaAlterar}}" data-parsley-validate="" class="form-horizontal form-label-left" method="post">
+            
             <div class="form-group row">
-                <label for="codigo" class="col-sm-2 col-form-label">Id</label>
+                <label for="id" class="col-sm-2 col-form-label">Id</label>
                 <div class="col-sm-2">
                 <input type="text" id="id" name="id" class="form-control col-md-7 col-xs-12" readonly="true" value="@if (isset($categorias[0]->id)){{$categorias[0]->id}}@else{{''}}@endif">
                 </div>
@@ -97,29 +98,11 @@
         @endif
             @csrf <!--{{ csrf_field() }}-->
             <div class="form-group row">
-                <label for="codigo" class="col-sm-2 col-form-label">Código</label>
-                <div class="col-sm-2">
-                <input type="text" class="form-control is-invalid" id="codigo" name="codigo" required value="@if (isset($categorias[0]->codigo)){{$categorias[0]->codigo}}@else{{''}}@endif">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="Material" class="col-sm-2 col-form-label">Nome</label>
+                <label for="categorias" class="col-sm-2 col-form-label">Nome</label>
                 <div class="col-sm-6">
-                <input type="text" class="form-control is-invalid" required id="material"  name="material"  value="@if (isset($categorias[0]->material)){{$categorias[0]->material}}@else{{''}}@endif">
+                <input type="text" class="form-control is-invalid" required id="categorias"  name="nome"  value="@if (isset($categorias[0]->nome)){{$categorias[0]->nome}}@else{{''}}@endif">
                 </div>
             </div>
-            @if (!empty($historicos))
-                <div class="form-group row">
-                    <label for="observacao" class="col-sm-2 col-form-label">Histórico</label>
-                    <div class="col-sm-8">
-                        <div class="d-flex p-2 bd-highlight overflow-auto">
-                            @foreach ($historicos as $historico)
-                                {{ '[' . \Carbon\Carbon::parse($historico->created_at)->format('d/m/Y h:i:s') . '] ' . $historico->historico }}</br>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            @endif
             <div class="form-group row">
                 <div class="col-sm-5">
                     <button class="btn btn-danger" onclick="window.history.back();" type="button">Cancelar</button>
