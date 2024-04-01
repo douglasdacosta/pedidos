@@ -31,6 +31,10 @@ Route::match(['get', 'post'],'/categorias', [App\Http\Controllers\CategoriasCont
 Route::match(['get', 'post'],'/alterar-categorias', [App\Http\Controllers\CategoriasController::class, 'alterar'])->name('alterar-categorias');
 Route::match(['get', 'post'],'/incluir-categorias', [App\Http\Controllers\CategoriasController::class, 'incluir'])->name('incluir-categorias');
 
+Route::match(['get', 'post'],'/produtos', [App\Http\Controllers\ProdutosController::class, 'index'])->name('produtos');
+Route::match(['get', 'post'],'/alterar-produtos', [App\Http\Controllers\ProdutosController::class, 'alterar'])->name('alterar-produtos');
+Route::match(['get', 'post'],'/incluir-produtos', [App\Http\Controllers\ProdutosController::class, 'incluir'])->name('incluir-produtos');
+
 Route::match(['get', 'post'],'/clientes', [App\Http\Controllers\PessoasController::class, 'index'])->name('clientes');
 Route::match(['get', 'post'],'/alterar-clientes', [App\Http\Controllers\PessoasController::class, 'alterar'])->name('alterar-clientes');
 Route::match(['get', 'post'],'/incluir-clientes', [App\Http\Controllers\PessoasController::class, 'incluir'])->name('incluir-clientes');
