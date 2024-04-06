@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Pro Effect')
+@section('title', env('APP_NAME'))
 
 @section('content_header')
     <h1 class="m-0 text-dark">Configuração da conta</h1>
@@ -30,7 +30,7 @@
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary">Salvar</button>
                                 </div>
-                            </form>              
+                            </form>
                         </div>
                     </div>
                 </div>

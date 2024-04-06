@@ -1,7 +1,7 @@
 <?php use \App\Http\Controllers\PedidosController; ?>
 @extends('adminlte::page')
 
-@section('title', 'Pro Effect')
+@section('title', env('APP_NAME'))
 <script src="../vendor/jquery/jquery.min.js"></script>
 <script src="js/jquery.mask.js"></script>
 <script src="js/main_custom.js"></script>
@@ -22,7 +22,7 @@
                     <div class="spinner-border" role="status">
                     </div>
                   </div>
-        </div>        
+        </div>
         <div id="toastsContainerTopRight" class="toasts-top-right fixed">
             <div class="toast fade show" role="alert" style="width: 350px" aria-live="assertive"
                 aria-atomic="true">
@@ -215,7 +215,7 @@
         @endif
 
 
-            
+
                     <div class="form-group row">
                         <h3 class="text-dark ">Total de materiais</h1>
                     </div>

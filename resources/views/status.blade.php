@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Pro Effect')
+@section('title', env('APP_NAME'))
 
 
 

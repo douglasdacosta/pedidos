@@ -4,7 +4,7 @@ $palheta_cores = [1 => '#ff003d', 2 => '#ee7e4c', 3 => '#8f639f', 4 => '#94c5a5'
 ?>
 @extends('adminlte::page')
 
-@section('title', 'Pro Effect')
+@section('title', env('APP_NAME'))
 <script src="../vendor/jquery/jquery.min.js"></script>
 <script src="js/jquery.mask.js"></script>
 <script src="js/main_custom.js"></script>
@@ -58,10 +58,10 @@ $palheta_cores = [1 => '#ff003d', 2 => '#ee7e4c', 3 => '#8f639f', 4 => '#94c5a5'
                             <input type="text" id="nome_cliente" name="nome_cliente" class="form-control col-md-13"
                                 value="">
                         </div>
-                        <label for="os" class="col-sm-2 col-form-label text-right">OS</label>
-                        <div class="col-sm-1">
-                            <input type="text" id="os" name="os" class="form-control" value="">
-                        </div>
+                        <!--    <label for="os" class="col-sm-2 col-form-label text-right">OS</label> -->
+                        <!-- <div class="col-sm-1"> -->
+                            <!-- <input type="text" id="os" name="os" class="form-control" value=""> -->
+                        <!-- </div> -->
                         <label for="blank" class="col-sm-2 col-form-label text-right text-sm-end">Status do pedido</label>
                         <div class="col-sm-2">
                             <select class="form-control" id="status_id" name="status_id">
@@ -77,12 +77,10 @@ $palheta_cores = [1 => '#ff003d', 2 => '#ee7e4c', 3 => '#8f639f', 4 => '#94c5a5'
                     </div>
 
                     <div class="form-group row">
-
-
-                        <label for="ep" class="col-sm-1 col-form-label text-right">EP</label>
-                        <div class="col-sm-1">
+                        <!-- <label for="ep" class="col-sm-1 col-form-label text-right">EP</label> -->
+                        <!-- <div class="col-sm-1">
                             <input type="text" id="ep" name="ep" class="form-control col-md-13" value="">
-                        </div>
+                        </div> -->
                         <label for="data_entrega" class="col-sm-2 col-form-label text-right">Data entrega: de</label>
                         <div class="col-sm-1">
                             <input type="text" class="form-control mask_date" id="data_entrega" name="data_entrega"
@@ -95,12 +93,12 @@ $palheta_cores = [1 => '#ff003d', 2 => '#ee7e4c', 3 => '#8f639f', 4 => '#94c5a5'
                         </div>
                         <label for="status" class="col-sm-1 col-form-label">&nbsp;</label>
                         <div class="col-sm-2">
-                            <select class="form-control col-md-5" id="status" name="status">
+                            <!-- <select class="form-control col-md-5" id="status" name="status">
                                 <option value="A" @if (isset($request) && $request->input('status') == 'A') {{ ' selected ' }}@else @endif>Ativo
                                 </option>
                                 <option value="I" @if (isset($request) && $request->input('status') == 'I') {{ ' selected ' }}@else @endif>Inativo
                                 </option>
-                            </select>
+                            </select> -->
                         </div>
                     </div>
                     <div class="form-group row">
@@ -127,16 +125,11 @@ $palheta_cores = [1 => '#ff003d', 2 => '#ee7e4c', 3 => '#8f639f', 4 => '#94c5a5'
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>OS</th>
-                                            <th>EP</th>
                                             <th>Qtde</th>
                                             <th>Cliente</th>
                                             <th>Status do pedido</th>
                                             <th>Data gerado</th>
                                             <th>Data entrega</th>
-                                            <th>Alerta dias</th>
-                                            <th>OS</th>
-                                            <th>MP</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -225,30 +218,7 @@ $palheta_cores = [1 => '#ff003d', 2 => '#ee7e4c', 3 => '#8f639f', 4 => '#94c5a5'
                     <form id="incluir" action="{{ $rotaIncluir }}" data-parsley-validate=""
                         class="form-horizontal form-label-left" method="post">
             @endif
-            @csrf <!--{{ csrf_field() }}-->
-            <div class="form-group row">
-                <label for="os" class="col-sm-2 col-form-label">OS</label>
-                <div class="col-sm-1">
-                    <input type="text" class="form-control" id="os" name="os"
-                        value="@if (isset($pedidos[0]->os)) {{ $pedidos[0]->os }}@else{{ '' }} @endif">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="fichatecnica" class="col-sm-2 col-form-label">Produto (Ficha técnica)</label>
-                <div class="col-sm-2">
-                    <select class="form-control  is-invalid" id="fichatecnica" required name="fichatecnica">
-                        <option value=""></option>
-                        @if (isset($fichastecnicas))
-                            @foreach ($fichastecnicas as $fichatecnica)
-                                <option value="{{ $fichatecnica->id }}"
-                                    @if (isset($pedidos[0]->fichatecnica_id) && $pedidos[0]->fichatecnica_id == $fichatecnica->id) selected="selected" @else{{ '' }} @endif>
-                                    {{ $fichatecnica->ep }}
-                                </option>
-                            @endforeach
-                        @endif
-                    </select>
-                </div>
-            </div>
+            @csrf
             <div class="form-group row">
                 <label for="clientes_id" class="col-sm-2 col-form-label">Cliente</label>
                 <div class="col-sm-4">
@@ -265,39 +235,6 @@ $palheta_cores = [1 => '#ff003d', 2 => '#ee7e4c', 3 => '#8f639f', 4 => '#94c5a5'
                     </select>
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="transporte_id" class="col-sm-2 col-form-label">Trasporte</label>
-                <div class="col-sm-4">
-                    <select class="form-control" id="transporte_id" name="transporte_id">
-                        <option value=""></option>
-                        @if (isset($transportes))
-                            @foreach ($transportes as $transporte)
-                                <option value="{{ $transporte->id }}"
-                                    @if (isset($pedidos[0]->transporte_id) && $pedidos[0]->transporte_id == $transporte->id) selected="selected" @else{{ '' }} @endif>
-                                    {{ $transporte->nome }}
-                                </option>
-                            @endforeach
-                        @endif
-                    </select>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="prioridade_id" class="col-sm-2 col-form-label">Prioridade</label>
-                <div class="col-sm-2">
-                    <select class="form-control" id="prioridade_id" name="prioridade_id">
-                        <option value=""></option>
-                        @if (isset($prioridades))
-                            @foreach ($prioridades as $prioridade)
-                                <option value="{{ $prioridade->id }}"
-                                    @if (isset($pedidos[0]->prioridade_id) && $pedidos[0]->prioridade_id == $prioridade->id) selected="selected" @else{{ '' }} @endif>
-                                    {{ $prioridade->nome }}
-                                </option>
-                            @endforeach
-                        @endif
-                    </select>
-                </div>
-            </div>
-
             <div class="form-group row">
                 <label for="qtde" class="col-sm-2 col-form-label">Qtde</label>
                 <div class="col-sm-1">

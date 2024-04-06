@@ -2,7 +2,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Pro Effect')
+@section('title', env('APP_NAME'))
 
 <script src="../vendor/jquery/jquery.min.js"></script>
 <script src="js/jquery.mask.js"></script>
