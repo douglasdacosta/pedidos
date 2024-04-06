@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Pessoas extends Model
-{    
+class Clientes extends Model
+{
     use HasFactory;
 
-    public function pessoas(){
+    public function clientes(){
         return $this->belongsTo(Pedidos::class);
     }
 }

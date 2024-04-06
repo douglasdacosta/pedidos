@@ -14,9 +14,9 @@ return [
     |
     */
 
-    'title' => 'Pro Effect',
-    'title_prefix' => 'Pro Effect',
-    'title_postfix' => 'Pro Effect',
+    'title' => 'CRM Mondarc',
+    'title_prefix' => '',
+    'title_postfix' => '',
 
     /*
     |--------------------------------------------------------------------------

@@ -53,6 +53,17 @@ $(function ($) {
         }
     };
     $('.mask_phone').mask(behavior, options);
+
+    var behavior_cnpj_cnpf = function (val) {
+        return val.replace(/\D/g, '').length >11 ? '00.000.000/0000-00' : '000.000.000-00999';
+    },
+    options = {
+        onKeyPress: function (val, e, field, options) {
+            field.mask(behavior_cnpj_cnpf.apply({}, arguments), options);
+        }
+    };
+    $('.mask_cpf_cnpj').mask(behavior_cnpj_cnpf, options);
+
     $('.toast').hide();
 
 

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Pro Effect')
+@section('title', env('APP_NAME'))
 {{-- <script src="js/jquery_v3.1.1.js"></script> --}}
 <script src="../vendor/jquery/jquery.min.js"></script>
 <script src="js/jquery.mask.js"></script>
@@ -89,7 +89,7 @@
                 <h1 class="m-0 text-dark">Alteração de {{ $nome_tela }}</h1>
             @stop
             <form id="alterar" action="{{$rotaAlterar}}" data-parsley-validate="" class="form-horizontal form-label-left" method="post">
-            
+
             <div class="form-group row">
                 <label for="id" class="col-sm-2 col-form-label">Id</label>
                 <div class="col-sm-2">

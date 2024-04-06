@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Pro Effect')
+@section('title', env('APP_NAME'))
 <script src="../vendor/jquery/jquery.min.js"></script>
 <script src="js/jquery.mask.js"></script>
 <script src="js/main_custom.js"></script>
@@ -19,21 +19,27 @@
 
         <form id="filtro" action="clientes" method="get" data-parsley-validate="" class="form-horizontal form-label-left" novalidate="">
             <div class="form-group row">
-                <label for="codigo_cliente" class="col-sm-1 col-form-label">Código cliente</label>
-                <div class="col-sm-2">
-                    <input type="text" id="codigo_cliente" name="codigo_cliente" class="form-control col-md-7 col-xs-12" value="@if (isset($request) && $request->input('codigo_cliente') != ''){{$request->input('codigo_cliente')}}@else @endif">
+                <label for="razao_social" class="col-sm-1 col-form-label">Razão Social</label>
+                <div class="col-sm-4">
+                    <input type="text" id="razao_social" name="razao_social" class="form-control col-md-7" value="@if (isset($request) && trim($request->input('razao_social')) != ''){{$request->input('razao_social')}}@else @endif">
                 </div>
-                <label for="nome_cliente" class="col-sm-1 col-form-label">Nome cliente</label>
+                <label for="nome_fantasia" class="col-sm-2 col-form-label">Nome Fantasia</label>
                 <div class="col-sm-5">
-                    <input type="text" id="nome_cliente" name="nome_cliente" class="form-control col-md-7 col-xs-12" value="@if (isset($request) && trim($request->input('nome_cliente')) != ''){{$request->input('nome_cliente')}}@else @endif">
+                    <input type="text" id="nome_fantasia" name="nome_fantasia" class="form-control col-md-7" value="@if (isset($request) && trim($request->input('nome_fantasia')) != ''){{$request->input('nome_fantasia')}}@else @endif">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="nome_contato" class="col-sm-1 col-form-label">Nome contato</label>
-                <div class="col-sm-5">
-                    <input type="text" id="nome_contato" name="nome_contato" class="form-control col-md-7 col-xs-12" value="@if (isset($request) && trim($request->input('nome_contato')) != ''){{$request->input('nome_contato')}}@else @endif">
+                <label for="nome_responsavel" class="col-sm-1 col-form-label">Nome contato</label>
+                <div class="col-sm-4">
+                    <input type="text" id="nome_responsavel" name="nome_responsavel" class="form-control col-md-7 col-xs-12" value="@if (isset($request) && trim($request->input('nome_responsavel')) != ''){{$request->input('nome_responsavel')}}@else @endif">
                 </div>
-                <label for="status" class="col-sm-1 col-form-label"></label>
+                <label for="cnpj" class="col-sm-2 col-form-label">CPF/CNPJ</label>
+                <div class="col-sm-5">
+                    <input type="text" id="cnpj" name="cnpj" class="form-control col-md-7 col-xs-12 mask_cpf_cnpj" value="@if (isset($request) && trim($request->input('cnpj')) != ''){{$request->input('cnpj')}}@else @endif">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="status" class="col-sm-1 col-form-label">Situação</label>
                 <select class="form-control col-md-1" id="status" name="status">
                     <option value="A" @if (isset($request) && $request->input('status') == 'A'){{ ' selected '}}@else @endif>Ativo</option>
                     <option value="I" @if (isset($request) && $request->input('status')  == 'I'){{ ' selected '}}@else @endif>Inativo</option>
@@ -60,21 +66,23 @@
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Nome</th>
+                      <th>Razão Social</th>
+                      <th>Nome fantasia</th>
                       <th>Contato</th>
                       <th>Telefone</th>
                       <th>Email</th>
                     </tr>
                   </thead>
                   <tbody>
-                  @if(isset($pessoas))
-                        @foreach ($pessoas as $pessoa)
+                  @if(isset($clientes))
+                        @foreach ($clientes as $cliente)
                             <tr>
-                            <th scope="row"><a href={{ URL::route($rotaAlterar, array('id' => $pessoa->id )) }}>{{$pessoa->id}}</a></th>
-                              <td>{{$pessoa->nome_cliente}}</td>
-                              <td>{{$pessoa->nome_contato}}</td>
-                              <td class='mask_phone'>{{$pessoa->telefone}}</td>
-                              <td>{{$pessoa->email}}</td>
+                            <th scope="row"><a href={{ URL::route($rotaAlterar, array('id' => $cliente->id )) }}>{{$cliente->id}}</a></th>
+                              <td>{{$cliente->razao_social}}</td>
+                              <td>{{$cliente->nome_fantasia}}</td>
+                              <td>{{$cliente->nome_responsavel}}</td>
+                              <td class='mask_phone'>{{$cliente->telefone}}</td>
+                              <td>{{$cliente->email}}</td>
                             </tr>
                         @endforeach
                     @endif
@@ -108,84 +116,84 @@
         @endif
             @csrf <!--{{ csrf_field() }}-->
             <div class="form-group row">
-                <label for="codigo_cliente" class="col-sm-2 col-form-label">Código cliente</label>
-                <div class="col-sm-1">
-                <input type="text" class="form-control is-invalid" required id="codigo_cliente"  name="codigo_cliente" value="@if (isset($pessoas[0]->codigo_cliente)){{$pessoas[0]->codigo_cliente}}@else{{''}}@endif">
+                <label for="razao_social" class="col-sm-2 col-form-label">Razão Social*</label>
+                <div class="col-sm-6">
+                <input type="text" class="form-control " required id="razao_social"  name="razao_social" value="@if (isset($clientes[0]->razao_social)){{$clientes[0]->razao_social}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="nome_cliente" class="col-sm-2 col-form-label">Nome cliente</label>
+                <label for="nome_fantasia" class="col-sm-2 col-form-label">Nome Fantasia*</label>
                 <div class="col-sm-6">
-                <input type="text" class="form-control is-invalid" required id="nome_cliente"  name="nome_cliente" value="@if (isset($pessoas[0]->nome_cliente)){{$pessoas[0]->nome_cliente}}@else{{''}}@endif">
+                <input type="text" class="form-control " required id="nome_fantasia"  name="nome_fantasia" value="@if (isset($clientes[0]->nome_fantasia)){{$clientes[0]->nome_fantasia}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="nome_contato" class="col-sm-2 col-form-label">Nome contato</label>
+                <label for="cnpj" class="col-sm-2 col-form-label">CPF/CNPJ*</label>
                 <div class="col-sm-6">
-                <input type="text" class="form-control is-invalid" required id="nome_contato"  name="nome_contato" value="@if (isset($pessoas[0]->nome_contato)){{$pessoas[0]->nome_contato}}@else{{''}}@endif">
+                <input type="text" class="form-control mask_cpf_cnpj" required id="cnpj"  name="cnpj" value="@if (isset($clientes[0]->cnpj)){{$clientes[0]->cnpj}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="nome_assistente" class="col-sm-2 col-form-label">Nome Assistente</label>
+                <label for="nome_responsavel" class="col-sm-2 col-form-label">Nome Contato</label>
                 <div class="col-sm-6">
-                <input type="text" class="form-control" id="nome_assistente"  name="nome_assistente" value="@if (isset($pessoas[0]->nome_assistente)){{$pessoas[0]->nome_assistente}}@else{{''}}@endif">
+                <input type="text" class="form-control" id="nome_responsavel"  name="nome_responsavel" value="@if (isset($clientes[0]->nome_responsavel)){{$clientes[0]->nome_responsavel}}@else{{''}}@endif">
                 </div>
             </div>
 
             <div class="form-group row">
                 <label for="endereco" class="col-sm-2 col-form-label">Endereço</label>
                 <div class="col-sm-7">
-                <input type="text" class="form-control" id="endereco" name="endereco" value="@if (isset($pessoas[0]->endereco)){{$pessoas[0]->endereco}}@else{{''}}@endif">
+                <input type="text" class="form-control" id="endereco" name="endereco" value="@if (isset($clientes[0]->endereco)){{$clientes[0]->endereco}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="numero" class="col-sm-2 col-form-label">Numero</label>
                 <div class="col-sm-1">
-                <input type="text" class="form-control sonumeros" id="numero" name="numero" value="@if (isset($pessoas[0]->numero)){{$pessoas[0]->numero}}@else{{''}}@endif">
+                <input type="text" class="form-control sonumeros" id="numero" name="numero" value="@if (isset($clientes[0]->numero)){{$clientes[0]->numero}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="bairro" class="col-sm-2 col-form-label">Bairro</label>
                 <div class="col-sm-4">
-                <input type="text" class="form-control" id="bairro" name="bairro" value="@if (isset($pessoas[0]->bairro)){{$pessoas[0]->bairro}}@else{{''}}@endif">
+                <input type="text" class="form-control" id="bairro" name="bairro" value="@if (isset($clientes[0]->bairro)){{$clientes[0]->bairro}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="cidade" class="col-sm-2 col-form-label">Cidade</label>
                 <div class="col-sm-2">
-                <input type="text" class="form-control" id="cidade" name="cidade" value="@if (isset($pessoas[0]->cidade)){{$pessoas[0]->cidade}}@else{{''}}@endif">
+                <input type="text" class="form-control" id="cidade" name="cidade" value="@if (isset($clientes[0]->cidade)){{$clientes[0]->cidade}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="estado" class="col-sm-2 col-form-label">Estado</label>
                 <div class="col-sm-2">
-                <input type="text" class="form-control" id="estado" name="estado" value="@if (isset($pessoas[0]->estado)){{$pessoas[0]->estado}}@else{{''}}@endif">
+                <input type="text" class="form-control" id="estado" name="estado" value="@if (isset($clientes[0]->estado)){{$clientes[0]->estado}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="cep" class="col-sm-2 col-form-label">Cep</label>
                 <div class="col-sm-2">
-                <input type="text" class="form-control cep" id="cep" name="cep" value="@if (isset($pessoas[0]->cep)){{$pessoas[0]->cep}}@else{{''}}@endif">
+                <input type="text" class="form-control cep" id="cep" name="cep" value="@if (isset($clientes[0]->cep)){{$clientes[0]->cep}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
                 <div class="col-sm-2">
-                <input type="text" class="form-control is-invalid mask_phone" required id="telefone" name="telefone" value="@if (isset($pessoas[0]->telefone)){{$pessoas[0]->telefone}}@else{{''}}@endif">
+                <input type="text" class="form-control  mask_phone" id="telefone" name="telefone" value="@if (isset($clientes[0]->telefone)){{$clientes[0]->telefone}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="email" class="col-sm-2 col-form-label">Email</label>
                 <div class="col-sm-4">
-                <input type="text" class="form-control is-invalid" required id="email" name="email" value="@if (isset($pessoas[0]->email)){{$pessoas[0]->email}}@else{{''}}@endif">
+                <input type="text" class="form-control " id="email" name="email" value="@if (isset($clientes[0]->email)){{$clientes[0]->email}}@else{{''}}@endif">
                 </div>
             </div>
 
             <div class="form-group row">
                 <label for="status" class="col-sm-2 col-form-label"></label>
                 <select class="form-control col-md-1" id="status" name="status">
-                    <option value="A" @if (isset($pessoas[0]->status) && $pessoas[0]->status == 'A'){{ ' selected '}}@else @endif>Ativo</option>
-                    <option value="I" @if (isset($pessoas[0]->status) && $pessoas[0]->status =='I'){{ ' selected '}}@else @endif>Inativo</option>
+                    <option value="A" @if (isset($clientes[0]->status) && $clientes[0]->status == 'A'){{ ' selected '}}@else @endif>Ativo</option>
+                    <option value="I" @if (isset($clientes[0]->status) && $clientes[0]->status =='I'){{ ' selected '}}@else @endif>Inativo</option>
                 </select>
             </div>
             <div class="form-group row">

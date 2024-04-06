@@ -4,7 +4,7 @@ $palheta_cores = [1 => '#ff003d', 2 => '#ee7e4c', 3 => '#8f639f', 4 => '#94c5a5'
 ?>
 @extends('adminlte::page')
 
-@section('title', 'Pro Effect')
+@section('title', env('APP_NAME'))
 <script src="../vendor/jquery/jquery.min.js"></script>
 <script src="js/jquery.mask.js"></script>
 <script src="js/main_custom.js"></script>
@@ -252,7 +252,7 @@ $palheta_cores = [1 => '#ff003d', 2 => '#ee7e4c', 3 => '#8f639f', 4 => '#94c5a5'
             </div>
             <div class="form-group row">
                 <label for="data_entrega" class="col-sm-2 col-form-label">Data entrega</label>
-                <div class="col-sm-2">  
+                <div class="col-sm-2">
                     <input type="text" class="form-control mask_date" id="data_entrega" name="data_entrega"
                         value="@if (isset($pedidos[0]->data_entrega)) {{ Carbon\Carbon::parse($pedidos[0]->data_entrega)->format('d/m/Y') }} @else {{ '' }} @endif">
                 </div>
