@@ -45,7 +45,7 @@ class ProdutosController extends Controller
         $produtos = Produtos::select('produtos.*', 'categorias.nome as nome_categoria','produtos.descricao')
         ->join('categorias', 'categorias.id', '=', 'produtos.categorias_id')
         //->where('produtos.id', '=', $id)
-        ->limit(10)
+        ->limit(5)
         ->get();
         $tela = 'pesquisa';
     	$data = array(
@@ -97,7 +97,10 @@ class ProdutosController extends Controller
 
         $produtos = new Produtos();
 
-        $produtos= $produtos->where('id', '=', $request->input('id'))->get();
+        $produtos = Produtos::select('produtos.*', 'categorias.nome as nome_categoria','produtos.descricao')
+        ->join('categorias', 'categorias.id', '=', 'produtos.categorias_id')
+        ->where('produtos.id', '=', $request->input('id'))
+        ->get();
 
 		$metodo = $request->method();
 		if ($metodo == 'POST') {
@@ -105,7 +108,6 @@ class ProdutosController extends Controller
 	    	return redirect()->route('produtos', [ 'id' => $produtos_id ] );
 
     	}
-
         $tela = 'alterar';
     	$data = array(
 				'tela' => $tela,
@@ -114,7 +116,7 @@ class ProdutosController extends Controller
 				'request' => $request,
 				'rotaIncluir' => 'incluir-produtos',
 				'rotaAlterar' => 'alterar-produtos'
-			);
+			);  
 
         return view('produtos', $data);
     }
@@ -125,6 +127,7 @@ class ProdutosController extends Controller
             $produtos = $produtos::find($request->input('id'));
         }
         $produtos->nome = $request->input('nome');
+        $produtos->preco = $request->input('preco');
         $produtos->save();
         return $produtos->id;
     }

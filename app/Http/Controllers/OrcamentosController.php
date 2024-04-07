@@ -108,7 +108,7 @@ class OrcamentosController extends Controller
             $tempo_usinagem = $fichatecnicasitem->tempo_usinagem;
             $tempo_usinagem = $pedidos->multiplyTimeByInteger($tempo_usinagem,$fichatecnicasitem->qtde_blank);
 
-            $percentuais[$key]['percentual']=round($pedidos::calcularPorcentagemEntreMinutos($tempo_usinagem, $tempo_fresa_total));
+            // $percentuais[$key]['percentual']=round($pedidos::calcularPorcentagemEntreMinutos($tempo_usinagem, $tempo_fresa_total));
 
 
             $pecas = [
