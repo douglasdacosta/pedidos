@@ -130,7 +130,7 @@
             <div class="form-group row">
                 <label for="produtos" class="col-sm-2 col-form-label">Categoria</label>
                 <div class="col-sm-6">
-                <input type="text" class="form-control is-invalid" required id="categoria"  name="nome_categoria"  readonly="true" value="@if (isset($produtos[0]->nome_categoria)){{$produtos[0]->nome_categoria}}@else{{'oi'}}@endif">
+                <input type="text" class="form-control is-invalid" required id="categoria"  name="nome_categoria"  readonly="true" value="@if (isset($produtos[0]->nome_categoria)){{$produtos[0]->nome_categoria}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">

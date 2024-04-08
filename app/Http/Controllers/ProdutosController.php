@@ -45,7 +45,7 @@ class ProdutosController extends Controller
         $produtos = Produtos::select('produtos.*', 'categorias.nome as nome_categoria','produtos.descricao')
         ->join('categorias', 'categorias.id', '=', 'produtos.categorias_id')
         //->where('produtos.id', '=', $id)
-        ->limit(5)
+        ->limit(20)
         ->get();
         $tela = 'pesquisa';
     	$data = array(
