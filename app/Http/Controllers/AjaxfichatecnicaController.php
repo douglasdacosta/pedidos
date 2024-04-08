@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Materiais;
+use App\Models\Produtos;
 use PhpParser\Node\Expr\Cast\Array_;
 use PhpParser\Node\Expr\Cast\Object_;
 
@@ -26,8 +26,7 @@ class AjaxfichatecnicaController extends Controller
      */
     public function buscarMateriais(Request $request) {
 
-        $materiais = new Materiais();
-
+        $materiais = new Produtos();
         if($request->input('id')) {
             $material= $materiais->where('id', '=', $request->input('id'))->get();
             return response($material);
@@ -42,7 +41,7 @@ class AjaxfichatecnicaController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getAllMateriais() {
-        $Materiais = new Materiais();
+        $Materiais = new Produtos();
         return $Materiais->where('status', '=', 'A')->get();
 
     }

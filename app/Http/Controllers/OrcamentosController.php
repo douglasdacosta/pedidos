@@ -45,7 +45,6 @@ class OrcamentosController extends Controller
             $fichatecnicas = $fichatecnicas->where('status', '=', $request->input('status'));
         }
 
-
         $fichatecnicas = $fichatecnicas->get();
         $tela = 'pesquisa';
     	$data = array(

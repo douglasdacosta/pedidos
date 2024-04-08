@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Fichastecnicas;
 use App\Models\Fichastecnicasitens;
-use App\Models\Materiais;
+use App\Models\Produtos;
 use Illuminate\Support\Facades\DB;
 
 class FichatecnicaController extends Controller
@@ -44,7 +44,6 @@ class FichatecnicaController extends Controller
         if (!empty($request->input('status'))){
             $fichatecnicas = $fichatecnicas->where('status', '=', $request->input('status'));
         }
-
 
         $fichatecnicas = $fichatecnicas->get();
         $tela = 'pesquisa';
@@ -225,8 +224,8 @@ class FichatecnicaController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getAllMateriais() {
-        $Materiais = new Materiais();
-        return $Materiais->where('status', '=', 'A')->get();
+        $produtos = new Produtos();
+        return $produtos->where('status', '=', 'A')->get();
 
     }
 }
