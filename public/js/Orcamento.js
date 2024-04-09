@@ -12,39 +12,6 @@ $(function () {
         }
     }
 
-    $("#material_id").change(function () {
-        $('.overlay').show();
-        $('#blank, #medidax, #mediday, #qtde').val('');
-        $('#tempo_usinagem, #tempo_acabamento, #tempo_montagem, #tempo_montagem_torre, #tempo_inspecao').val('00:00');
-
-        $.ajax({
-            type: "POST",
-            url: '/ajax-fichatecnica',
-            data: {
-                id: this.value,
-                _token: $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (data) {
-                if(data[0].peca_padrao == 1){
-                    bloqueiaCampos(true);
-                } else {
-                    bloqueiaCampos(false);
-
-                }
-                hora = data[0].tempo_montagem_torre.toString().substring(8, 3);
-                hora = (hora == '') ? '00:00' : hora
-                $('#tempo_montagem_torre').val(hora);
-                $('.overlay').hide();
-                $('#blank').val('');
-            },
-            error: function (data, textStatus, errorThrown) {
-                $('.overlay').hide();
-            },
-
-        });
-
-    })
-
     function bloqueiaCampos($bloquear){
         if($bloquear){
             $('#tempo_usinagem, #blank, #medidax, #mediday, #tempo_acabamento, #tempo_montagem, #tempo_inspecao').prop('readonly', true);
@@ -79,15 +46,14 @@ $(function () {
         material = $('#material_id').val().toUpperCase().trim();
         $('#table_composicao tbody').append(
             '<tr class="material' + $('#material').val()+$('#material_id option:selected').val() + '">' +
-                '<td data-name="material" class="material" scope="row">' + material + '</td>' +
-                '<td data-name="qtde" class="qtde">' + $('#qtde').val() + '</td>' +
-                '<td data-name="unid" class="unid">' + $('#unid').val() + '</td>' +
-                '<td data-name="material_id" class="material_id" data-materialid="' + $('#material_id option:selected').val() + '" >' + $('#material_id option:selected').text() + 
-                '<td><button type="button" class="close" aria-label="Close" data-material="' + 
-                    $('#material').val()+$('#material_id option:selected').val() + '">' +
-                    '<span aria-hidden="true">&times;</span>' +
-                    '</button>' +
-                    '<button type="button" class="close edita_composicao" style="padding-right: 20px" data-material="' + $('#material').val()+$('#material_id option:selected').val() + '"><span aria-hidden="true">&#9998;</span></button>' +
+            '<td data-name="descricao" class="material" scope="row">' + $('#ep').val() + '</td>' +
+            '<td data-name="material_id" class="material_id" data-materialid="' + $('#material_id option:selected').val() + '" >' + $('#material_id option:selected').text() +
+            '<td data-name="qtd" class="unid">' + $('#unid').val() + '</td>' +    
+            '<td data-name="unid" class="qtde">' + $('#qtde').val() + '</td>' + 
+            '<td><button type="button" class="close" aria-label="Close" data-blank="' + $('#material').val()+$('#material_id option:selected').val() + '">' +
+                '<span aria-hidden="true">&times;</span>' +
+                '</button>' +
+                '<button type="button" class="close edita_composicao" style="padding-right: 20px" data-blank="' + $('#material').val()+$('#material_id option:selected').val() + '"><span aria-hidden="true">&#9998;</span></button>' +
                 '</td>' +
             '</tr>');
     });

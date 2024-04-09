@@ -127,7 +127,6 @@ class PedidosController extends Controller
 
 
             $pedidos_id = $this->salva($request);
-            // dd($pedidos_id);
             $this->historicosPedidos($pedidos_id, $request->input('status_id'));
             return redirect()->route('pedidos', ['id' => $pedidos_id]);
         }

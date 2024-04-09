@@ -4,7 +4,7 @@
 <script src="../vendor/jquery/jquery.min.js"></script>
 <script src="js/jquery.mask.js"></script>
 <script src="js/main_custom.js"></script>
-<script src="js/Orcamentog.js"></script>
+<script src="js/Orcamento.js"></script>
 
 @if (isset($tela) and $tela == 'pesquisa')
     @section('content_header')
