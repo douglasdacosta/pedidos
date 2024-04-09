@@ -43,53 +43,24 @@ $(function () {
             $('#unid').focus();
             return false;
         }
-        material = $('#material_id').val().toUpperCase().trim();
+        blank = $('#ep').val().toUpperCase().trim();
         $('#table_composicao tbody').append(
-            '<tr class="material' + $('#material').val()+$('#material_id option:selected').val() + '">' +
-            '<td data-name="descricao" class="material" scope="row">' + $('#ep').val() + '</td>' +
-            '<td data-name="material_id" class="material_id" data-materialid="' + $('#material_id option:selected').val() + '" >' + $('#material_id option:selected').text() +
-            '<td data-name="qtd" class="unid">' + $('#unid').val() + '</td>' +    
-            '<td data-name="unid" class="qtde">' + $('#qtde').val() + '</td>' + 
-            '<td><button type="button" class="close" aria-label="Close" data-blank="' + $('#material').val()+$('#material_id option:selected').val() + '">' +
-                '<span aria-hidden="true">&times;</span>' +
-                '</button>' +
-                '<button type="button" class="close edita_composicao" style="padding-right: 20px" data-blank="' + $('#material').val()+$('#material_id option:selected').val() + '"><span aria-hidden="true">&#9998;</span></button>' +
+            '<tr class="ep_'+$('#material_id option:selected').val() + '">' +
+                '<td data-name="ep" class="ep" scope="row">' + blank + '</td>' +
+                '<td data-name="material_id" class="material_id" data-materialid="' + $('#material_id option:selected').val() + '" >' + $('#material_id option:selected').text() + '</td>' +
+                '<td data-name="unid" class="qtde">' + $('#unid').val() + '</td>' +
+                '<td data-name="qtd" class="qtd">' + $('#qtde').val() + '</td>' +
+                '<td><button type="button" class="close" aria-label="Close" data-ep="' + $('#material_id option:selected').val() + '">' +
+                    '<span aria-hidden="true">&times;</span>' +
+                    '</button>' +
                 '</td>' +
             '</tr>');
     });
 
-    $(document).on('click', '#table_composicao .edita_composicao', function () {
-        id = $(this).data('material');
-        qtde = $('.material'+id+' td').eq(1).text().trim();
-        materialid = $('.material'+id+' td').eq(2).data('materialid');
-        $('#material_id').val(materialid);
-        $('#qtde').val(qtde);
-    });
-
-    /**
-     * Formata uma hora de 01:00 para 00:01:00
-     */
-    function formata000000(MinSeg) {
-        if(MinSeg.length < 6) {
-            return '00:'+MinSeg;
-        }
-        return MinSeg;
-    }
-
-    /**
-     * Formata uma hora de 00:01:00 para 01:00
-     */
-    function formata0000(horaMinSeg) {
-        if(horaMinSeg.length > 5) {
-            var partes = horaMinSeg.split(":");
-            return partes[1]+':'+partes[2];
-        }
-        return horaMinSeg;
-    }
-
     $(document).on('click', '#table_composicao .close', function () {
-        id = $(this).data('blank');
-        $('.blank_' + id).remove();
+        id = $(this).data('ep');
+        console.log(id);
+        $('.ep_' + id).remove();
         calculaTempos();
     });
 

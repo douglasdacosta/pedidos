@@ -204,14 +204,6 @@
         </div>
         <input type="hidden" id='composicoes' name="composicoes" value=''>
         <div class="form-group row">
-            <label for="status" class="col-sm-2 col-form-label"></label>
-            <select class="form-control col-md-1" id="status" name="status">
-                <option value="A" @if (isset($fichatecnicas[0]->status) && $fichatecnicas[0]->status == 'A') {{ ' selected ' }}@else @endif>Ativo</option>
-                <option value="I" @if (isset($fichatecnicas[0]->status) && $fichatecnicas[0]->status == 'I') {{ ' selected ' }}@else @endif>Inativo
-                </option>
-            </select>
-        </div>
-        <div class="form-group row">
             <div class="col-sm-10">
                 <button class="btn btn-danger" onclick="window.history.back();" type="button">Cancelar</button>
             </div>
