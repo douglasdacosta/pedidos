@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Fichastecnicas;
 use App\Models\Fichastecnicasitens;
-use App\Models\Materiais;
+use App\Models\Produtos;
 use Illuminate\Support\Facades\DB;
 
 class OrcamentosController extends Controller
@@ -94,43 +94,6 @@ class OrcamentosController extends Controller
 
         $fichatecnicasitens= $fichatecnicasitens::with('tabelaMateriais')->where('fichatecnica_id', '=', $request->input('id'))->orderByRaw("CASE WHEN blank='' THEN 1 ELSE 0 END ASC")->orderBy('blank','ASC')->get();
 
-        $tempo_fresa_total = '00:00:00';
-
-        foreach ($fichatecnicasitens as $key => $fichatecnicasitem) {
-            $tempo_usinagem = $fichatecnicasitem->tempo_usinagem;
-            $tempo_usinagem = $pedidos->multiplyTimeByInteger($tempo_usinagem,$fichatecnicasitem->qtde_blank);
-            $tempo_fresa_total = $pedidos::somarHoras($tempo_fresa_total, $tempo_usinagem);
-        }
-
-        foreach ($fichatecnicasitens as $key => $fichatecnicasitem) {
-           
-            $tempo_usinagem = $fichatecnicasitem->tempo_usinagem;
-            $tempo_usinagem = $pedidos->multiplyTimeByInteger($tempo_usinagem,$fichatecnicasitem->qtde_blank);
-
-            // $percentuais[$key]['percentual']=round($pedidos::calcularPorcentagemEntreMinutos($tempo_usinagem, $tempo_fresa_total));
-
-
-            $pecas = [
-                'width' => $fichatecnicasitem->medidax + 2,
-                'height'=> $fichatecnicasitem->mediday + 10,
-            ];
-
-            $chapa = [
-                'sheetWidth' => $fichatecnicasitem->tabelaMateriais->unidadex - 20,
-                'sheetHeight'=> $fichatecnicasitem->tabelaMateriais->unidadey - 20 
-            ];
-
-            if($fichatecnicasitem->tabelaMateriais->peca_padrao == 2){
-
-                $blank_por_chapa = $consumoMateriais->calculaPecas($pecas, $chapa);
-            } else {
-                
-                $blank_por_chapa = $fichatecnicasitem->qtde_blank;
-            }
-
-            $percentuais[$key]['blank_por_chapa'] = $blank_por_chapa;
-        }
-
         $tela = 'alterar';
     	$data = array(
 				'tela' => $tela,
@@ -140,9 +103,7 @@ class OrcamentosController extends Controller
 				'request' => $request,
                 'materiais' => $this->getAllMateriais(),
 				'rotaIncluir' => '',
-                'tempo_fresa_total' => $tempo_fresa_total,
 				'rotaAlterar' => 'alterar-orcamentos',
-                'percentuais' => $percentuais,
 			);
 
         return view('orcamentos', $data);
@@ -179,7 +140,7 @@ class OrcamentosController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function getAllMateriais() {
-        $Materiais = new Materiais();
+        $Materiais = new Produtos();
         return $Materiais->where('status', '=', 'A')->get();
 
     }
