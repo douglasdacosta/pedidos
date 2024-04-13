@@ -28,25 +28,21 @@ class ProdutosController extends Controller
      */
     public function index(Request $request)
     {
-        $id = !empty($request->input('id')) ? ($request->input('id')) : ( !empty($id) ? $id : false );
-        $nome = !empty($request->input('nome')) ? ($request->input('nome')) : ( !empty($nome) ? $nome : false );
-        $descricao = !empty($request->input('descricao')) ? ($request->input('descricao')) : ( !empty($descricao) ? $descricao : false );
-        $preco = !empty($request->input('preco')) ? ($request->input('preco')) : ( !empty($preco) ? $preco : false );
-        
-        $produtos = new Produtos();
+        $produtos = DB::table('produtos')
+        ->join('categorias', 'categorias.id', '=', 'produtos.categorias_id')
+        ->select('produtos.*', 'categorias.nome as nome_categoria','produtos.descricao');
 
-        if ($id) {
-        	$produtos =$produtos->where('id', '=', $id)->limit(10);
+        if (!empty($request->input('id'))) {
+        	$produtos = $produtos->where('produtos.id', '=', $request->input('id'));
         }
 
         if (!empty($request->input('nome'))) {
-        	$produtos = $produtos->where('nome', 'like', '%'.$request->input('nome').'%');
+            dd('aqui');
+        	$produtos = $produtos->where('produtos.nome', 'like', '%'.$request->input('nome').'%');
         }
-        $produtos = Produtos::select('produtos.*', 'categorias.nome as nome_categoria','produtos.descricao')
-        ->join('categorias', 'categorias.id', '=', 'produtos.categorias_id')
-        //->where('produtos.id', '=', $id)
-        ->limit(20)
-        ->get();
+
+        $produtos = $produtos->limit(20)->get();
+
         $tela = 'pesquisa';
     	$data = array(
 				'tela' => $tela,
@@ -70,15 +66,16 @@ class ProdutosController extends Controller
 
     	if ($metodo == 'POST') {
 
-    		$material_id = $this->salva($request);
+    		$produto_id = $this->salva($request);
 
-	    	return redirect()->route('produtos', [ 'id' => $material_id ] );
+	    	return redirect()->route('produtos', [ 'id' => $produto_id ] );
 
     	}
         $tela = 'incluir';
     	$data = array(
 				'tela' => $tela,
                 'nome_tela' => 'produtos',
+                'categorias' => (new CategoriasController)->getAllCategorias(),
 				'request' => $request,
 				'rotaIncluir' => 'incluir-produtos',
 				'rotaAlterar' => 'alterar-produtos'
@@ -97,10 +94,7 @@ class ProdutosController extends Controller
 
         $produtos = new Produtos();
 
-        $produtos = Produtos::select('produtos.*', 'categorias.nome as nome_categoria','produtos.descricao')
-        ->join('categorias', 'categorias.id', '=', 'produtos.categorias_id')
-        ->where('produtos.id', '=', $request->input('id'))
-        ->get();
+        $produtos = $produtos->where('id', '=', $request->input('id'))->get();
 
 		$metodo = $request->method();
 		if ($metodo == 'POST') {
@@ -112,11 +106,12 @@ class ProdutosController extends Controller
     	$data = array(
 				'tela' => $tela,
                 'nome_tela' => 'produtos',
+                'categorias' => (new CategoriasController)->getAllCategorias(),
 				'produtos'=> $produtos,
 				'request' => $request,
 				'rotaIncluir' => 'incluir-produtos',
 				'rotaAlterar' => 'alterar-produtos'
-			);  
+			);
 
         return view('produtos', $data);
     }
@@ -127,7 +122,20 @@ class ProdutosController extends Controller
             $produtos = $produtos::find($request->input('id'));
         }
         $produtos->nome = $request->input('nome');
+        $produtos->descricao = $request->input('descricao');
         $produtos->preco = $request->input('preco');
+        $produtos->categorias_id = $request->input('categorias_id');
+        $produtos->fabricante = $request->input('fabricante');
+        $produtos->codigo = $request->input('codigo');
+        $produtos->quantidade = $request->input('quantidade');
+        $produtos->precounitario = $request->input('precounitario');
+        $produtos->fat = $request->input('fat');
+        $produtos->moeda = $request->input('moeda');
+        $produtos->origempreco = $request->input('origempreco');
+        $produtos->totaladotado = $request->input('totaladotado');
+        $produtos->percentualdesconto = $request->input('percentualdesconto');
+        $produtos->sistema = $request->input('sistema');
+        $produtos->status = $request->input('status');
         $produtos->save();
         return $produtos->id;
     }

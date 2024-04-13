@@ -30,7 +30,7 @@ class CategoriasController extends Controller
     {
         $id = !empty($request->input('id')) ? ($request->input('id')) : ( !empty($id) ? $id : false );
         $nome = !empty($request->input('nome')) ? ($request->input('nome')) : ( !empty($nome) ? $nome : false );
-        
+
         $categorias = new Categorias();
 
         if ($id) {
@@ -42,7 +42,7 @@ class CategoriasController extends Controller
         }
 
         $categorias = $categorias->get();
-        
+
         $tela = 'pesquisa';
     	$data = array(
 				'tela' => $tela,
@@ -123,5 +123,12 @@ class CategoriasController extends Controller
         $categorias->nome = $request->input('nome');
         $categorias->save();
         return $categorias->id;
+    }
+
+
+    public function getAllCategorias() {
+        $categorias = new Categorias();
+        return $categorias->get();
+
     }
 }

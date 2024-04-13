@@ -15,16 +15,13 @@ return new class extends Migration
     {
         Schema::create('orcamentos', function (Blueprint $table) {
             $table->id();
-            $table->string('ep',100);
-            $table->string('rev',100);
-            $table->string('hora_fresa',20);
+            $table->integer('qtd')->nullable();
+            $table->string('material_id', 100);
             $table->text('dados_json');
+            $table->string('status', 1)->nullable();
             $table->timestamps();
         });
-
-
     }
-
 
     /**
      * Reverse the migrations.

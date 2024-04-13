@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Fichastecnicas;
-use App\Models\Fichastecnicasitens;
 use App\Models\Orcamentos;
 use App\Models\Produtos;
 use Illuminate\Support\Facades\DB;
@@ -80,7 +78,7 @@ class FichatecnicaController extends Controller
 				'tela' => $tela,
                 'nome_tela' => 'ficha técnica',
 				'request' => $request,
-				'materiais' => $this->getAllMateriais(),
+				'produtos' => (new OrcamentosController)->getAllProdutos(),
 				'rotaIncluir' => 'incluir-fichatecnica',
 				'rotaAlterar' => 'alterar-fichatecnica'
 			);
@@ -109,7 +107,7 @@ class FichatecnicaController extends Controller
 
         $fichatecnica= $fichatecnicas->where('id', '=', $request->input('id'))->get();
         $fichatecnicasitens= $fichatecnicasitens::with('materiais')->where('fichatecnica_id', '=', $request->input('id'))->orderByRaw("CASE WHEN blank='' THEN 1 ELSE 0 END ASC")->orderBy('blank','ASC')->get();
-        
+
         $tela = 'alterar';
     	$data = array(
 				'tela' => $tela,
@@ -138,7 +136,7 @@ class FichatecnicaController extends Controller
             $fichatecnicas->ep = $request->input('ep');
             $fichatecnicas->material_id =  $request->input('material_id');
             $fichatecnicas->unid =  $request->input('unid');
-            $fichatecnicas->qtd =  $request->input('qtd');        
+            $fichatecnicas->qtd =  $request->input('qtd');
             $fichatecnicas->status = 'A';
             $fichatecnicas->save();
 
@@ -188,7 +186,7 @@ class FichatecnicaController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getAllMateriais() {
+    public function getAllProdutos() {
         $produtos = new Produtos();
         return $produtos->where('status', '=', 'A')->get();
 

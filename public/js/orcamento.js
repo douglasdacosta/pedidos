@@ -12,45 +12,26 @@ $(function () {
         }
     }
 
-    function bloqueiaCampos($bloquear){
-        if($bloquear){
-            $('#tempo_usinagem, #blank, #medidax, #mediday, #tempo_acabamento, #tempo_montagem, #tempo_inspecao').prop('readonly', true);
-        } else {
-            $('#tempo_usinagem, #blank, #medidax, #mediday, #tempo_acabamento, #tempo_montagem, #tempo_inspecao').prop('readonly', false);
-    
-        }
-    }
-    
+
 
     $("#addComposicao").click(function () {
-        if ($('#ep').val().trim() == '') {
-            abreAlert('O campo EP' + texto);
-            $('#ep').focus();
-            return false;
-        }
-        if ($('#material_id').val() == '') {
-            abreAlert('O campo  Material não selecionado');
-            $('#material_id').focus();
-            return false;
-        }
+
         if ($('#qtde').val().trim() == '') {
             abreAlert('O campo  Qtde' + texto);
             $('#qtde').focus();
             return false;
         }
-        if ($('#unid').val().trim() == '') {
-            abreAlert('O campo  unid' + texto);
-            $('#unid').focus();
-            return false;
-        }
-        blank = $('#ep').val().toUpperCase().trim();
+
         $('#table_composicao tbody').append(
-            '<tr class="ep_'+$('#material_id option:selected').val() + '">' +
-                '<td data-name="ep" class="ep" scope="row">' + blank + '</td>' +
-                '<td data-name="material_id" class="material_id" data-materialid="' + $('#material_id option:selected').val() + '" >' + $('#material_id option:selected').text() + '</td>' +
-                '<td data-name="unid" class="qtde">' + $('#unid').val() + '</td>' +
-                '<td data-name="qtd" class="qtd">' + $('#qtde').val() + '</td>' +
-                '<td><button type="button" class="close" aria-label="Close" data-ep="' + $('#material_id option:selected').val() + '">' +
+            '<tr class="codigo_'+$('#produto option:selected').val() + '">' +
+                '<td data-name="" class="" scope="row">01</td>' +
+                '<td data-name="" class="" scope="row">Ar</td>' +
+                '<td data-name="" class="" scope="row">Ar condicionado</td>' +
+                '<td data-name="" class="" scope="row">Ventilação</td>' +
+                '<td data-name="" class="" scope="row">vb</td>' +
+                '<td data-name="" class="" scope="row">1500,00</td>' +
+                '<td data-name="" class="" scope="row">1</td>' +
+                '<td><button type="button" class="close" aria-label="Close" data-ep="' + $('#produto option:selected').val() + '">' +
                     '<span aria-hidden="true">&times;</span>' +
                     '</button>' +
                 '</td>' +

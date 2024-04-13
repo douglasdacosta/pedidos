@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Fichastecnicas;
 use App\Models\Fichastecnicasitens;
+use App\Models\Orcamentos;
 use App\Models\Produtos;
 use Illuminate\Support\Facades\DB;
 
@@ -28,31 +29,26 @@ class OrcamentosController extends Controller
     public function index(Request $request)
     {
         $id = !empty($request->input('id')) ? ($request->input('id')) : ( !empty($id) ? $id : false );
-        $ep = !empty($request->input('ep')) ? ($request->input('ep')) : ( !empty($ep) ? $ep : false );
-        $status_ = !empty($request->input('status')) ? ($request->input('status')) : ( !empty($status) ? $status : false );
 
-        $fichatecnicas = new Fichastecnicas();
+        $orcamentos = new Orcamentos();
 
         if ($id) {
-        	$fichatecnicas = $fichatecnicas->where('id', '=', $id);
-        }
-
-        if ($ep) {
-        	$fichatecnicas = $fichatecnicas->where('ep', '=', $ep);
+        	$orcamentos = $orcamentos->where('id', '=', $id);
         }
 
         if (!empty($request->input('status'))){
-            $fichatecnicas = $fichatecnicas->where('status', '=', $request->input('status'));
+            $orcamentos = $orcamentos->where('status', '=', $request->input('status'));
         }
 
-        $fichatecnicas = $fichatecnicas->get();
+        $orcamentos = $orcamentos->get();
         $tela = 'pesquisa';
     	$data = array(
 				'tela' => $tela,
                 'nome_tela' => 'orçamentos',
-				'fichatecnicas'=> $fichatecnicas,
+				'orcamentos'=> $orcamentos,
+                'produtos' => $this->getAllProdutos(),
 				'request' => $request,
-				'rotaIncluir' => 'incluir-fichatecnica',
+				'rotaIncluir' => 'incluir-orcamentos',
 				'rotaAlterar' => 'alterar-orcamentos'
 			);
 
@@ -66,7 +62,26 @@ class OrcamentosController extends Controller
      */
     public function incluir(Request $request)
     {
+        $metodo = $request->method();
 
+    	if ($metodo == 'POST') {
+    		$orcamentos_id = $this->salva($request);
+
+	    	return redirect()->route('orcamentos', [ 'id' => $orcamentos_id ] );
+
+    	}
+        $tela = 'incluir';
+    	$data = array(
+				'tela' => $tela,
+                'nome_tela' => 'orçamentos',
+				'request' => $request,
+                'clientes' => (new ClientesController)->getAllCliente(),
+                'produtos' => $this->getAllProdutos(),
+				'rotaIncluir' => 'incluir-orcamentos',
+				'rotaAlterar' => 'alterar-orcamentos'
+			);
+
+        return view('orcamentos', $data);
     }
 
      /**
@@ -80,28 +95,22 @@ class OrcamentosController extends Controller
 
 		if ($metodo == 'POST') {
 
-    		$fichatecnica_id = $this->salva($request);
+    		$orcamento_id = $this->salva($request);
 
-	    	return redirect()->route('fichatecnica', [ 'id' => $fichatecnica_id ] );
+	    	return redirect()->route('orcamento', [ 'id' => $orcamento_id ] );
     	}
 
-        $fichatecnicas = new Fichastecnicas();
-        $fichatecnicasitens = new Fichastecnicasitens();
-        $pedidos = new PedidosController();
-        $consumoMateriais = new ConsumoMateriaisController();
+        $orcamentos = new Orcamentos();
 
-        $fichatecnica= $fichatecnicas->where('id', '=', $request->input('id'))->get();
-
-        $fichatecnicasitens= $fichatecnicasitens::with('tabelaMateriais')->where('fichatecnica_id', '=', $request->input('id'))->orderByRaw("CASE WHEN blank='' THEN 1 ELSE 0 END ASC")->orderBy('blank','ASC')->get();
+        $orcamento= $orcamentos->where('id', '=', $request->input('id'))->get();
 
         $tela = 'alterar';
     	$data = array(
 				'tela' => $tela,
-                'nome_tela' => 'ficha técnica',
-				'fichatecnicas'=> $fichatecnica,
-                'fichatecnicasitens' => $fichatecnicasitens,
+                'nome_tela' => 'Orçamentos',
+				'orcamentos'=> $orcamento,
+                'produtos' => $this->getAllProdutos(),
 				'request' => $request,
-                'materiais' => $this->getAllMateriais(),
 				'rotaIncluir' => '',
 				'rotaAlterar' => 'alterar-orcamentos',
 			);
@@ -139,9 +148,9 @@ class OrcamentosController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getAllMateriais() {
-        $Materiais = new Produtos();
-        return $Materiais->where('status', '=', 'A')->get();
+    public function getAllProdutos() {
+        $Produtos = new Produtos();
+        return $Produtos->where('status', '=', 'A')->get();
 
     }
 }
