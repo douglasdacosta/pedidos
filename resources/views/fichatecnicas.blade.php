@@ -55,7 +55,6 @@
                         <table class="table table-striped  text-center">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Codigo Orçamento</th>
                                 </tr>
                             </thead>
@@ -66,7 +65,6 @@
                                             <th scope="row"><a
                                                     href={{ URL::route($rotaAlterar, ['id' => $fichatecnica->id]) }}>{{ $fichatecnica->id }}</a>
                                             </th>
-                                            <td>{{ $fichatecnica->ep }}</td>
                                         </tr>
                                     @endforeach
                                 @endif

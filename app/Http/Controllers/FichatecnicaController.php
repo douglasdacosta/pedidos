@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Fichastecnicas;
 use App\Models\Fichastecnicasitens;
+use App\Models\Orcamentos;
 use App\Models\Produtos;
 use Illuminate\Support\Facades\DB;
 
@@ -31,7 +32,7 @@ class FichatecnicaController extends Controller
         $ep = !empty($request->input('ep')) ? ($request->input('ep')) : ( !empty($ep) ? $ep : false );
         $status_ = !empty($request->input('status')) ? ($request->input('status')) : ( !empty($status) ? $status : false );
 
-        $fichatecnicas = new Fichastecnicas();
+        $fichatecnicas = new Orcamentos();
 
         if ($id) {
         	$fichatecnicas = $fichatecnicas->where('id', '=', $id);
@@ -128,17 +129,16 @@ class FichatecnicaController extends Controller
 
         DB::transaction(function () use ($request) {
 
-            $fichatecnicas = new Fichastecnicas();
+            $fichatecnicas = new Orcamentos();
             $Fichastecnicasitens = new Fichastecnicasitens();
             if($request->input('id')) {
                 $fichatecnicas = $fichatecnicas::find($request->input('id'));
                 $Fichastecnicasitens::where('fichatecnica_id', '=', $request->input('id'))->delete();
             }
             $fichatecnicas->ep = $request->input('ep');
-            $fichatecnicas->tempo_usinagem =  $request->input('material_id');
-            $fichatecnicas->tempo_acabamento =  $request->input('unid');
-            $fichatecnicas->tempo_montagem =  $request->input('qtd');        
-            // $fichatecnicas->status = $request->input('status');
+            $fichatecnicas->material_id =  $request->input('material_id');
+            $fichatecnicas->unid =  $request->input('unid');
+            $fichatecnicas->qtd =  $request->input('qtd');        
             $fichatecnicas->status = 'A';
             $fichatecnicas->save();
 
