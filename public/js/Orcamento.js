@@ -55,7 +55,8 @@ $(function () {
                     '</button>' +
                 '</td>' +
             '</tr>');
-    });
+        bloqueiaEP();
+        });
 
     $(document).on('click', '#table_composicao .close', function () {
         id = $(this).data('ep');
