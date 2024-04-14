@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Fichastecnicas;
-use App\Models\Fichastecnicasitens;
 use App\Models\Orcamentos;
 use App\Models\Produtos;
 use App\Models\TextoObservacaoExecucao;
 use App\Models\TextoOrcamentos;
+use App\Providers\DateHelpers;
 use Illuminate\Support\Facades\DB;
 
 class OrcamentosController extends Controller
@@ -30,25 +29,45 @@ class OrcamentosController extends Controller
      */
     public function index(Request $request)
     {
-        $id = !empty($request->input('id')) ? ($request->input('id')) : ( !empty($id) ? $id : false );
+
+
 
         $orcamentos = new Orcamentos();
 
-        if ($id) {
-        	$orcamentos = $orcamentos->where('id', '=', $id);
+        $orcamentos = DB::table('orcamentos')
+        ->join('status', 'orcamentos.status_id', '=', 'status.id')
+        ->join('clientes', 'clientes.id', '=', 'orcamentos.cliente_id')
+        ->select('orcamentos.id as orcamentos_id', 'orcamentos.created_at as data_gerado', 'clientes.id as cliente_id', 'clientes.nome_fantasia as nome_fantasia', 'status.nome as status_name')
+        ->limit(20);
+
+        if (!empty($request->input('id'))) {
+        	$orcamentos = $orcamentos->where('orcamentos.id', '=', $request->input('id'));
         }
 
-        if (!empty($request->input('status'))){
-            $orcamentos = $orcamentos->where('status', '=', $request->input('status'));
+        if (!empty($request->input('orcamentos.status'))){
+            $orcamentos = $orcamentos->where('orcamentos.status', '=', $request->input('status'));
         }
+
+        if(!empty($request->input('created_at')) && !empty($request->input('created_at_fim') )) {
+            $orcamentos = $orcamentos->whereBetween('orcamentos.created_at', [DateHelpers::formatDate_dmY($request->input('created_at')), DateHelpers::formatDate_dmY($request->input('created_at_fim'))]);
+        }
+        if(!empty($request->input('created_at')) && empty($request->input('created_at_fim') )) {
+            $orcamentos = $orcamentos->where('orcamentos.created_at', '>=', DateHelpers::formatDate_dmY($request->input('created_at')));
+        }
+        if(empty($request->input('created_at')) && !empty($request->input('created_at_fim') )) {
+            $orcamentos = $orcamentos->where('orcamentos.created_at', '<=', DateHelpers::formatDate_dmY($request->input('created_at_fim')));
+        }
+
 
         $orcamentos = $orcamentos->get();
+        // dd($orcamentos);
         $tela = 'pesquisa';
     	$data = array(
 				'tela' => $tela,
                 'nome_tela' => 'orçamentos',
 				'orcamentos'=> $orcamentos,
                 'produtos' => $this->getAllProdutos(),
+                'status_orcamento' => (new StatusController)->getAllStatus(),
 				'request' => $request,
 				'rotaIncluir' => 'incluir-orcamentos',
 				'rotaAlterar' => 'alterar-orcamentos'
@@ -81,6 +100,7 @@ class OrcamentosController extends Controller
                 'produtos' => $this->getAllProdutos(),
                 'textos_orcamentos' => $this->getAllTextoObservacoes(),
                 'textos_observacao_execucao' => $this->getAllTextoObservacoesExclusoes(),
+                'status_orcamento' => (new StatusController)->getAllStatus(),
 				'rotaIncluir' => 'incluir-orcamentos',
 				'rotaAlterar' => 'alterar-orcamentos'
 			);
@@ -113,9 +133,11 @@ class OrcamentosController extends Controller
 				'tela' => $tela,
                 'nome_tela' => 'Orçamentos',
 				'orcamentos'=> $orcamento,
+                'clientes' => (new ClientesController)->getAllCliente(),
                 'produtos' => $this->getAllProdutos(),
                 'textos_orcamentos' => $this->getAllTextoObservacoes(),
                 'textos_observacao_execucao' => $this->getAllTextoObservacoesExclusoes(),
+                'status_orcamento' => (new StatusController)->getAllStatus(),
 				'request' => $request,
 				'rotaIncluir' => '',
 				'rotaAlterar' => 'alterar-orcamentos',
@@ -128,27 +150,41 @@ class OrcamentosController extends Controller
 
         DB::transaction(function () use ($request) {
 
+            $Orcamentos = new Orcamentos();
 
+            if($request->input('id')) {
+                $Orcamentos = $Orcamentos::find($request->input('id'));
+            }
+
+            $composicoes_orcamento = json_decode($request->input('composicoes'));
+            $Orcamentos->cliente_id = $request->input('cliente_id');
+            $Orcamentos->status_id = $request->input('status_id');
+            $Orcamentos->texto_orcamento = $request->input('texto_orcamento');
+            $Orcamentos->dados_json = json_encode($composicoes_orcamento);
+            $Orcamentos->observacoes_exclusoes = $request->input('observacoes_exclusoes');
+            $Orcamentos->prazo_execucao = $request->input('prazo_execucao');
+            $Orcamentos->garantia = $request->input('garantia');
+            $Orcamentos->exibir_valores_orcamento = $request->input('exibir_valores_orcamento');
+            $Orcamentos->descricao_valores = $request->input('descricao_valores');
+            $Orcamentos->condicoes_pagamentos = $request->input('condicoes_pagamentos');
+            $Orcamentos->dados_bancarios_pagamento = $request->input('dados_bancarios_pagamento');
+            $Orcamentos->status = $request->input('status');
+            $Orcamentos->save();
+
+            return $Orcamentos->id;
         });
     }
 
-/**
- * Transforma um numero inteiro em formato de 00:00:00
- */
-    function trataStringHora($numeroString) {
+    public function imprimir(Request $request)
+    {
+        $orcamentos = new Orcamentos();
+        $orcamentos = $orcamentos->where('id', '=', $request->input('id'))->get();
+        // $imprimirPDF = new PDFController();
+        //return $imprimirPDF->generatePDF($data, 'imprimir_orcamentos');
 
-        preg_match_all('/[0-9]/', $numeroString, $numerosEncontrados);
+        return view('imprimir_orcamentos', ['orcamentos' => $orcamentos]);
 
-        $numerosString = $numerosEncontrados ? implode('', $numerosEncontrados[0]) : '';
-
-        while (strlen($numerosString) < 6) {
-            $numerosString = '0' . $numerosString;
-        }
-        $horaFormatada = substr($numerosString, 0, 2) . ':' . substr($numerosString, 2, 2) . ':' . substr($numerosString, 4, 2);
-
-        return $horaFormatada;
     }
-
 
     public function getAllProdutos() {
         $Produtos = new Produtos();

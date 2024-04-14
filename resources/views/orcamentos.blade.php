@@ -24,12 +24,17 @@
             <form id="filtro" action="orcamentos" method="get" data-parsley-validate=""
                 class="form-horizontal form-label-left" novalidate="">
                 <div class="form-group row">
-                    <label for="ep" class="col-sm-2 col-form-label">Código</label>
+                    <label for="id" class="col-sm-2 col-form-label text-right">Código</label>
                     <div class="col-sm-2">
-                        <input type="text" id="ep" name="ep" class="form-control col-md-7 col-xs-12"
-                            value="@if (isset($request) && $request->input('ep') != '') {{ $request->input('ep') }}@else @endif">
+                        <input type="text" id="id" name="id" class="form-control col-md-7 col-xs-12"
+                            value="@if (isset($request) && $request->input('id') != '') {{ $request->input('id') }}@else @endif">
                     </div>
-                    <label for="status" class="col-sm-1 col-form-label"></label>
+                    <label for="cliente_id" class="col-sm-1 col-form-label text-right">Cliente</label>
+                    <div class="col-sm-4">
+                        <input type="text" id="cliente_id" name="cliente_id" class="form-control col-md-7 col-xs-12"
+                            value="@if (isset($request) && $request->input('cliente_id') != '') {{ $request->input('cliente_id') }}@else @endif">
+                    </div>
+                    <label for="status" class="col-sm-1 col-form-label text-right">Situação</label>
                     <select class="form-control col-md-1" id="status" name="status">
                         <option value="A" @if (isset($request) && $request->input('status') == 'A') {{ ' selected ' }}@else @endif>Ativo
                         </option>
@@ -37,6 +42,18 @@
                         </option>
                     </select>
                 </div>
+        </div>
+        <div class="form-group row">
+            <label for="created_at" class="col-sm-2 col-form-label text-right">Data Orçamento: de</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control mask_date" id="created_at" name="created_at"
+                    placeholder="DD/MM/AAAA">
+            </div>
+            <label for="created_at_fim" class=" col-form-label text-right">até</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control mask_date" id="created_at_fim" name="created_at_fim"
+                    placeholder="DD/MM/AAAA">
+            </div>
         </div>
         <div class="form-group row">
             <div class="col-sm-5">
@@ -65,12 +82,24 @@
                                     <th>Impressão</th>
                                 </tr>
                             </thead>
+                            {{-- +"orcamentos_id": 1
+                            +"data_gerado": "2024-04-14 16:25:56"
+                            +"cliente_id": 1
+                            +"nome_fantasia": "4million"
+                            +"status_name": "Pendente" --}}
                             <tbody>
-                                @if (isset($fichatecnicas))
-                                    @foreach ($fichatecnicas as $fichatecnica)
+                                @if (isset($orcamentos))
+                                    @foreach ($orcamentos as $orcamento)
                                         <tr>
                                             <th scope="row"><a
-                                                    href={{ URL::route($rotaAlterar, ['id' => $fichatecnica->id]) }}>{{ $fichatecnica->id }}</a>
+                                                    href={{ URL::route($rotaAlterar, ['id' => $orcamento->orcamentos_id]) }}>{{ $orcamento->orcamentos_id }}</a>
+                                            </th>
+                                            <td scope="row">{{$orcamento->nome_fantasia}}</td>
+                                            <td scope="row">{{$orcamento->status_name}}</td>
+                                            <td scope="row">{{ Carbon\Carbon::parse($orcamento->data_gerado)->format('d/m/Y')}}</td>
+                                            <th scope="row">
+                                                <a href="{{ URL::route('imprimir-orcamentos', ['id' => $orcamento->orcamentos_id]) }}" <span
+                                                    class="fa fa-print"></span></a>
                                             </th>
                                         </tr>
                                     @endforeach
@@ -126,11 +155,11 @@
 <div class="form-group row">
     <label for="blank" class="col-sm-2 col-form-label text-right text-sm-end">Clientes*</label>
     <div class="col-sm-4">
-        <select class="form-control" id="material_id" name="material_id">
+        <select class="form-control" id="cliente_id" name="cliente_id">
             <option value=""></option>
             @if (isset($clientes))
                 @foreach ($clientes as $cliente)
-                    <option value="{{ $cliente->id }}">{{ $cliente->nome_fantasia }}
+                    <option value="{{ $cliente->id }}"  @if (isset($orcamentos[0]->cliente_id) && $orcamentos[0]->cliente_id == $cliente->id) {{ ' selected ' }}@else @endif>{{ $cliente->nome_fantasia }}
                     </option>
                 @endforeach
             @endif
@@ -205,7 +234,7 @@
 <div class="form-group row">
     <label for="blank" class="col-sm-2 col-form-label text-right text-sm-end">Textos Obs e Exc*</label>
     <div class="col-sm-4">
-        <select class="form-control" id="produto" name="produto">
+        <select class="form-control" id="textos_obs_exec" name="textos_obs_exec">
             <option value=""></option>
             @if (isset($textos_observacao_execucao))
                 @foreach ($textos_observacao_execucao as $textos_observacao_execucao)
@@ -282,6 +311,26 @@
             @endif
         </textarea>
     </div>
+</div>
+<div class="form-group row">
+    <label for="status_id" class="col-sm-2 col-form-label text-right text-sm-end">Status do Orçamento</label>
+    <div class="col-sm-4">
+        <select class="form-control" id="status_id" name="status_id">
+            @if (isset($status_orcamento))
+                @foreach ($status_orcamento as $status_orc)
+                    <option @if (isset($orcamentos[0]->status_id) && $orcamentos[0]->status_id == $status_orc->id) {{ ' selected ' }}@else @endif value="{{ $status_orc->id }}">{{ $status_orc->nome }}
+                    </option>
+                @endforeach
+            @endif
+        </select>
+    </div>
+</div>
+<div class="form-group row">
+    <label for="status" class="col-sm-2 col-form-label text-right ">Situação</label>
+    <select class="form-control col-md-1" id="status" name="status">
+        <option value="A" @if (isset($orcamentos[0]->status) && $orcamentos[0]->status == 'A') {{ ' selected ' }}@else @endif>Ativo</option>
+        <option value="I" @if (isset($orcamentos[0]->status) && $orcamentos[0]->status == 'I') {{ ' selected ' }}@else @endif>Inativo</option>
+    </select>
 </div>
 <input type="hidden" id='composicoes' name="composicoes" value=''>
 <div class="form-group row">

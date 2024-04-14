@@ -45,10 +45,12 @@
 .contenedor .table tr td .top_texto_itens {
     margin-top: 53px;
 }
+
+
         </style>
 
     {{-- <script src="{{asset('js/bootstrap.4.6.2.js')}}"></script> --}}
-    <script src="{{asset('jquery_v3.5.1.js')}}"></script>
+    <script src="{{asset('js/jquery_v3.5.1.js')}}"></script>
 </head>
 <body>
     <div id="app">

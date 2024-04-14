@@ -1,7 +1,6 @@
 
 $(function () {
 
-    calculaTempos()
     $('.toast').hide();
 
     function bloqueiaEP() {
@@ -23,15 +22,15 @@ $(function () {
         }
 
         $('#table_composicao tbody').append(
-            '<tr class="codigo_'+$('#produto option:selected').val() + '">' +
-                '<td data-name="" class="" scope="row">01</td>' +
-                '<td data-name="" class="" scope="row">Ar</td>' +
-                '<td data-name="" class="" scope="row">Ar condicionado</td>' +
-                '<td data-name="" class="" scope="row">Ventilação</td>' +
-                '<td data-name="" class="" scope="row">vb</td>' +
-                '<td data-name="" class="" scope="row">1500,00</td>' +
-                '<td data-name="" class="" scope="row">1</td>' +
-                '<td><button type="button" class="close" aria-label="Close" data-ep="' + $('#produto option:selected').val() + '">' +
+            '<tr class="produto_id_'+$('#produto option:selected').val() + '">' +
+                '<td data-name="produto_id" class="codigo" scope="row">'+$('#produto option:selected').val()+'</td>' +
+                '<td data-name="categoria" class="" scope="row">Ar</td>' +
+                '<td data-name="produto" class="" scope="row">'+$('#produto option:selected').text()+'</td>' +
+                '<td data-name="descricao" class="" scope="row">Ventilação</td>' +
+                '<td data-name="unidade" class="" scope="row">vb</td>' +
+                '<td data-name="preco_unitario" class="" scope="row">1500,00</td>' +
+                '<td data-name="quantidade" class="" scope="row">1</td>' +
+                '<td><button type="button" class="close" aria-label="Close" data-codigoproduto="produto_id_'+$('#produto option:selected').val() + '">' +
                     '<span aria-hidden="true">&times;</span>' +
                     '</button>' +
                 '</td>' +
@@ -40,10 +39,8 @@ $(function () {
         });
 
     $(document).on('click', '#table_composicao .close', function () {
-        id = $(this).data('ep');
-        console.log(id);
-        $('.ep_' + id).remove();
-        calculaTempos();
+        id = $(this).data('codigoproduto');
+        $('.' + id).remove();
     });
 
     $(document).on('click', 'button.close', function () {
@@ -59,137 +56,6 @@ $(function () {
     };
 
 
-    function calculaTempos() {
-        somatempo_usinagem_total = somatempo_acabamento_total = somatempo_montagem_total = somamontagem_torre_total = somatempo_inspecao_total = '00:00:00';
-        $('.tempo_usinagem').each(function (i, e) {
-            if (e.textContent != '') {
-                somatempo_usinagem_linha = multiplicaMinutos(i, e.textContent);
-                somatempo_usinagem_total = somarHoras(somatempo_usinagem_total, somatempo_usinagem_linha);
-            }
-        });
-
-        $('.tempo_acabamento').each(function (i, e) {
-            if (e.textContent != '') {
-                somatempo_acabamento_linha = multiplicaMinutos(i, e.textContent);
-                somatempo_acabamento_total = somarHoras(somatempo_acabamento_total, somatempo_acabamento_linha);
-            }
-        });
-
-        $('.tempo_montagem').each(function (i, e) {
-            if (e.textContent != '') {
-                somatempo_montagem_linha = multiplicaMinutos(i, e.textContent);
-                somatempo_montagem_total = somarHoras(somatempo_montagem_total, somatempo_montagem_linha);
-            }
-        });
-
-        $('.tempo_montagem_torre').each(function (i, e) {
-            if (e.textContent != '') {
-                somatempo_torre_linha = multiplicaMinutos(i, e.textContent);
-                somamontagem_torre_total = somarHoras(somamontagem_torre_total, somatempo_torre_linha);
-            }
-        });
-
-        $('.tempo_inspecao').each(function (i, e) {
-            if (e.textContent != '') {
-                somatempo_inspecao_linha = multiplicaMinutos(i, e.textContent);
-                somatempo_inspecao_total = somarHoras(somatempo_inspecao_total, somatempo_inspecao_linha);
-            }
-        });
-
-
-        $('#soma_tempo_acabamento').val(somatempo_acabamento_total.toString().replace('.', ','));
-        $('#soma_tempo_montagem_torre').val(somamontagem_torre_total.toString().replace('.', ','));
-        $('#soma_tempo_montagem').val(somatempo_montagem_total.toString().replace('.', ','));
-        $('#soma_tempo_usinagem').val(somatempo_usinagem_total.toString().replace('.', ','));
-        $('#soma_tempo_inspecao').val(somatempo_inspecao_total.toString().replace('.', ','));
-
-        bloqueiaEP();
-    }
-
-    /**
-     * Transforma um numero inteiro em formato de 00:00:00
-     * @param {*} numeroString
-     * @returns
-     */
-    function trataStringHora(numeroString) {
-        const numerosEncontrados = numeroString.match(/[0-9]/g);
-
-        numerosString2 = numerosEncontrados ? numerosEncontrados.join('') : '';
-
-        while (numerosString2.length < 6) {
-            numerosString2 = '0' + numerosString2;
-        }
-        return numerosString2.toString().substring(2, 0) + ':' + numerosString2.toString().substring(4, 2) + ':' + numerosString2.toString().substring(6, 4);
-    }
-
-    /**
-     * multiplica um valor em horas por um inteiro
-     * @param {*} index
-     * @param {*} valor
-     * @returns
-     */
-    function multiplicaMinutos(index, valor) {
-
-        valor = trataStringHora(valor);
-        qtde = $('.qtde').eq(index).text();
-        valor = multiplicarHoras(valor, qtde);
-        return valor;
-    }
-
-    /**
-     *
-     * @param {*} padraoHoras
-     * @param {*} multiplicador
-     * @returns
-     */
-    function multiplicarHoras(padraoHoras, multiplicador) {
-
-        padraoHoras = trataStringHora(padraoHoras);
-
-        // Dividir as horas, minutos e segundos
-        const [horas, minutos, segundos] = padraoHoras.toString().split(':').map(Number);
-
-        // Converter tudo para segundos e multiplicar pelo fator
-        const totalSegundos = (horas * 3600 + minutos * 60 + segundos) * multiplicador;
-
-        // Converter de volta para o formato de horas
-        const novoHoras = Math.floor(totalSegundos / 3600);
-        const novoMinutos = Math.floor((totalSegundos % 3600) / 60);
-        const novoSegundos = totalSegundos % 60;
-
-        // Formatar e retornar o resultado
-        const resultado = novoHoras.toString().padStart(2, '0') + ':' + novoMinutos.toString().padStart(2, '0') + ':' + novoSegundos.toString().padStart(2, '0');
-
-        return resultado;
-    }
-
-    /**
-     * Soma dois valores de homas Ex: 00:00:10 + 00:00:10 = 00:00:20
-     * @param {*} hora1
-     * @param {*} hora2
-     * @returns
-     */
-    function somarHoras(hora1, hora2) {
-
-        hora1 = trataStringHora(hora1);
-        hora2 = trataStringHora(hora2)
-        // Dividir as horas, minutos e segundos
-        const [h1, m1, s1] = hora1.toString().split(':').map(Number);
-        const [h2, m2, s2] = hora2.toString().split(':').map(Number);
-
-        // Somar as horas, minutos e segundos
-        const totalSegundos = (h1 * 3600 + m1 * 60 + s1) + (h2 * 3600 + m2 * 60 + s2);
-
-        // Converter de volta para o formato de horas
-        const novoHoras = Math.floor(totalSegundos / 3600);
-        const novoMinutos = Math.floor((totalSegundos % 3600) / 60);
-        const novoSegundos = totalSegundos % 60;
-
-        // Formatar e retornar o resultado
-        const resultado = novoHoras.toString().padStart(2, '0') + ':' + novoMinutos.toString().padStart(2, '0') + ':' + novoSegundos.toString().padStart(2, '0');
-        return resultado;
-    }
-
     $("#salvar_ficha").click(function () {
 
         var composicaoep = new Array();
@@ -197,12 +63,7 @@ $(function () {
         $('#table_composicao tbody tr').each(function (i, e) {
             json = new Array();
             $(e).find('td').each(function (c, j) {
-
-                if ($(j).data('name') == 'material_id') {
-                    json.push('{"' + $(j).data('name') + '":"' + $(j).data('materialid') + '"}');
-                } else {
-                    json.push('{"' + $(j).data('name') + '":"' + $(j).text().trim() + '"}');
-                }
+                json.push('{"' + $(j).data('name') + '":"' + $(j).text().trim() + '"}');
             });
             composicaoep.push(json);
         })
@@ -210,11 +71,6 @@ $(function () {
         composicaoep = JSON.stringify(composicaoep);
         json_valores = {
             "composicaoep": composicaoep,
-            "soma_tempo_acabamento": $('#soma_tempo_acabamento').val(),
-            "soma_tempo_montagem_torre": $('#soma_tempo_montagem_torre').val(),
-            "soma_tempo_montagem": $('#soma_tempo_montagem').val(),
-            "soma_tempo_usinagem": $('#soma_tempo_usinagem').val(),
-            "soma_tempo_inspecao": $('#soma_tempo_inspecao').val(),
         }
 
         $('#composicoes').val(JSON.stringify(json_valores));

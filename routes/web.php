@@ -46,5 +46,6 @@ Route::match(['get', 'post'],'/incluir-pedidos', [App\Http\Controllers\PedidosCo
 Route::match(['get', 'post'],'/orcamentos', [App\Http\Controllers\OrcamentosController::class, 'index'])->name('orcamentos');
 Route::match(['get', 'post'],'/incluir-orcamentos', [App\Http\Controllers\OrcamentosController::class, 'incluir'])->name('incluir-orcamentos');
 Route::match(['get', 'post'],'/alterar-orcamentos', [App\Http\Controllers\OrcamentosController::class, 'alterar'])->name('alterar-orcamentos');
+Route::match(['get',],'/imprimir-orcamentos', [App\Http\Controllers\OrcamentosController::class, 'imprimir'])->name('imprimir-orcamentos');
 
 Route::match(['get', 'post'],'/teste', [App\Http\Controllers\TestesController::class, 'index'])->name('teste');

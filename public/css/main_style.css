@@ -22,3 +22,25 @@
     background-color: #FFFFFF;
     position: fixed;
 }
+
+html{
+    background-color: #343a40;
+}
+.content{
+    background-color: #f4f6f9
+}
+
+.sidebar-mini{
+    height: 100%;
+}
+
+.main-sidebar {
+    height: 300%;
+}
+.elevation-4 {
+    box-shadow: 0 0px 0px  #343a40,0 0px 0px  #343a40 !important;
+  }
+
+#incluir {
+    padding-bottom: 10px;
+}

@@ -129,5 +129,11 @@ class StatusController extends Controller
 
         return $status->id;
 
-}
+    }
+
+    public function getAllStatus()
+    {
+        $Status = new Status();
+        return $Status->where('status', '=', 'A')->get();
+    }
 }
