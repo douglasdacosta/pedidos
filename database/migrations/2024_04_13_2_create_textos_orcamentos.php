@@ -11,11 +11,14 @@ return new class extends Migration
     {
         Schema::create('texto_orcamentos', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('pessoas_id')->unsigned()->index();
             $table->string('texto_prefixo')->nullable();
             $table->text('texto_completo')->nullable();
             $table->string('status',1);
             $table->timestamps();
+            $table->foreign('pessoas_id')->references('id')->on('pessoas');
         });
+
 
 
     DB::table('texto_orcamentos')->insert(

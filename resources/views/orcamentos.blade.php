@@ -59,6 +59,10 @@
                             <thead>
                                 <tr>
                                     <th>Codigo Orçamento</th>
+                                    <th>Cliente</th>
+                                    <th>Status do Orçamento</th>
+                                    <th>Data gerado</th>
+                                    <th>Impressão</th>
                                 </tr>
                             </thead>
                             <tbody>
