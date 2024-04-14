@@ -24,7 +24,7 @@
             <form id="filtro" action="orcamentos" method="get" data-parsley-validate=""
                 class="form-horizontal form-label-left" novalidate="">
                 <div class="form-group row">
-                    <label for="ep" class="col-sm-2 col-form-label">EP</label>
+                    <label for="ep" class="col-sm-2 col-form-label">Código</label>
                     <div class="col-sm-2">
                         <input type="text" id="ep" name="ep" class="form-control col-md-7 col-xs-12"
                             value="@if (isset($request) && $request->input('ep') != '') {{ $request->input('ep') }}@else @endif">
