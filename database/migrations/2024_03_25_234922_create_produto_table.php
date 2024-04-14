@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateProdutoTable extends Migration
@@ -25,9 +26,34 @@ class CreateProdutoTable extends Migration
             $table->decimal('totaladotado', 10, 2)->nullable();
             $table->decimal('percentualdesconto', 5, 2)->nullable();
             $table->string('sistema', 50)->nullable();
+            $table->string('unidade_medida')->nullable();;
+            $table->decimal('preco_unitario')->nullable();;
             $table->string('status')->nullable();
             $table->timestamps();
         });
+        DB::table('produtos')->insert(
+            [
+                ['nome' => 'Chapa galvanizada #26', 'categorias_id' => 1],
+                ['nome' => 'Chapa galvanizada #24', 'categorias_id' => 1],
+                ['nome' => 'Chapa galvanizada #22', 'categorias_id' => 1],
+                ['nome' => 'Chapa galvanizada #20', 'categorias_id' => 1],
+                ['nome' => 'Chapa galvanizada #18', 'categorias_id' => 1],
+                ['nome' => 'Chapa preta #16', 'categorias_id' => 1],
+                ['nome' => 'Chapa Alumínio #24', 'categorias_id' => 1],
+                ['nome' => 'Chapa Alumínio #22', 'categorias_id' => 1],
+                ['nome' => 'Chapa Alumínio #20', 'categorias_id' => 1],
+                ['nome' => 'Chapa Inox 304', 'categorias_id' => 1],
+                ['nome' => 'Isolamento em manta de lã de vidro 38 mm', 'categorias_id' => 1], 
+                ['nome' => 'Isolamento em manta cerâmica 38 mm e densidade de 96 kg/m³', 'categorias_id' => 1],
+                ['nome' => 'Acessórios (Cantoneira em chapa / Barra roscada 3/8" / perfilado 38 x 38 mm / fita aluminizada)', 'categorias_id' => 1],
+                ['nome' => 'Canto TDC + Porcas + Parafusor', 'categorias_id' => 1],
+                ['nome' => 'Flexível', 'categorias_id' => 1],
+                ['nome' => 'Colarinho com ou sem registro', 'categorias_id' => 1],
+                ['nome' => 'Duto PVC', 'categorias_id' => 1],
+                ['nome' => 'Pintura', 'categorias_id' => 1],
+            ]
+        );
+        
     }
 
     public function down()
