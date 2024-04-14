@@ -203,9 +203,9 @@
     <div class="col-sm-4">
         <select class="form-control" id="produto" name="produto">
             <option value=""></option>
-            @if (isset($produtos))
-                @foreach ($produtos as $produto)
-                    <option value="{{ $produto->id }}">{{ $produto->id . ' - ' . $produto->nome }}
+            @if (isset($textos_observacao_execucao))
+                @foreach ($textos_observacao_execucao as $textos_observacao_execucao)
+                    <option value="{{ $textos_observacao_execucao->id }}">{{ $textos_observacao_execucao->texto_prefixo }}
                     </option>
                 @endforeach
             @endif
@@ -219,34 +219,62 @@
     </div>
 </div>
 <div class="form-group row">
-    <label for="texto_orcamento" class="col-sm-2 col-form-label text-right text-sm-end">Observações e Exclusões</label>
+    <label for="observacoes_exclusoes" class="col-sm-2 col-form-label text-right text-sm-end">Observações e Exclusões</label>
     <div class="col-sm-6">
-        <textarea class="form-control" id="texto_orcamento" name="texto_orcamento">
-@if (isset($orcamentos[0]->texto_orcamento))
-{{ trim($orcamentos[0]->texto_orcamento) }}@else{{ '' }}
+        <textarea class="form-control" id="observacoes_exclusoes" name="observacoes_exclusoes">
+@if (isset($orcamentos[0]->observacoes_exclusoes))
+{{ trim($orcamentos[0]->observacoes_exclusoes) }}@else{{ '' }}
 @endif
 </textarea>
     </div>
 </div>
 <hr class="my-3">
 <div class="form-group row">
-    <label for="texto_orcamento" class="col-sm-2 col-form-label text-right text-sm-end">Prazo de Execução</label>
+    <label for="prazo_execucao" class="col-sm-2 col-form-label text-right text-sm-end">Prazo de Execução</label>
     <div class="col-sm-6">
-        <textarea class="form-control" id="texto_orcamento" name="texto_orcamento">
-            @if (isset($orcamentos[0]->texto_orcamento))
-            {{ trim($orcamentos[0]->texto_orcamento) }}@else{{ 'Nosso prazo para execução será de até 30 (trinta) dias.' }}
+        <textarea class="form-control" id="prazo_execucao" name="prazo_execucao">@if (isset($orcamentos[0]->prazo_execucao)){{ trim($orcamentos[0]->prazo_execucao) }}@else{{ $textos_orcamentos[0]['texto_completo'] }}@endif</textarea>
+    </div>
+</div>
+<hr class="my-3">
+<div class="form-group row">
+    <label for="garantia" class="col-sm-2 col-form-label text-right text-sm-end">Garantia</label>
+    <select class="form-control col-md-8" id="garantia" name="garantia">
+        <option value="1" @if (isset($orcamento[0]->garantia) && $orcamento[0]->garantia == '1') {{ ' selected ' }}@else @endif>Todos os nossos serviços e materiais terão direito a garantia de 01 (um) ano contra defeitos de
+            fabricação e instalação, exceto àqueles que apresentarem falhas ou falta de manutenção.</option>
+        <option value="2" @if (isset($orcamento[0]->garantia) && $orcamento[0]->garantia == '2') {{ ' selected ' }}@else @endif>Todos os nossos serviços e materiais terão direito a garantia de 03 (três) meses contra defeitos de
+            fabricação e instalação, exceto aqueles existentes ou que apresentarem falhas ou falta de
+            manutenção</option>
+    </select>
+</div>
+<hr class="my-3">
+<div class="form-group row">
+    <label for="exibir_valores_orcamento" class="col-sm-2 col-form-label text-right text-sm-end">Exibir valores no orçamento</label>
+    <select class="form-control col-md-2" id="exibir_valores_orcamento" name="exibir_valores_orcamento">
+        <option value="1" @if (isset($orcamento[0]->garantia) && $orcamento[0]->garantia == '1') {{ ' selected ' }}@else @endif>Sim</option>
+        <option value="2" @if (isset($orcamento[0]->garantia) && $orcamento[0]->garantia == '2') {{ ' selected ' }}@else @endif>Não</option>
+    </select>
+</div>
+    <div class="form-group row">
+
+    <label for="descricao_valores" class="col-sm-2 col-form-label text-right text-sm-end">Descrição dos Valores</label>
+    <div class="col-sm-6">
+        <textarea class="form-control" rows="4" id="descricao_valores" name="descricao_valores">@if (isset($orcamentos[0]->descricao_valores)){{ trim($orcamentos[0]->descricao_valores) }}@else{{$textos_orcamentos[1]['texto_completo'] }}
             @endif
         </textarea>
     </div>
 </div>
 <hr class="my-3">
 <div class="form-group row">
-    <label for="texto_orcamento" class="col-sm-2 col-form-label text-right text-sm-end">Garantia</label>
+    <label for="condicoes_pagamentos" class="col-sm-2 col-form-label text-right text-sm-end">Condições de Pagamento</label>
     <div class="col-sm-6">
-        <textarea class="form-control" id="texto_orcamento" name="texto_orcamento">
-            @if (isset($orcamentos[0]->texto_orcamento))
-            {{ trim($orcamentos[0]->texto_orcamento) }}@else{{'Todos os nossos serviços e materiais terão direito a garantia de 01 (um) ano contra defeitos de fabricação e
-            instalação, exceto àqueles que apresentarem falhas ou falta de manutenção'}}
+        <textarea class="form-control" id="condicoes_pagamentos" name="condicoes_pagamentos">@if (isset($orcamentos[0]->condicoes_pagamentos)){{ trim($orcamentos[0]->condicoes_pagamentos) }}@else{{$textos_orcamentos[2]['texto_completo'] }}@endif</textarea>
+    </div>
+</div>
+<hr class="my-3">
+<div class="form-group row">
+    <label for="dados_bancarios_pagamento" class="col-sm-2 col-form-label text-right text-sm-end">Dados Bancários Para Pagamento</label>
+    <div class="col-sm-6">
+        <textarea class="form-control" rows="10"  id="dados_bancarios_pagamento" name="dados_bancarios_pagamento">@if (isset($orcamentos[0]->dados_bancarios_pagamento)){{ trim($orcamentos[0]->dados_bancarios_pagamento) }}@else{{$textos_orcamentos[3]['texto_completo'] }}
             @endif
         </textarea>
     </div>

@@ -7,6 +7,8 @@ use App\Models\Fichastecnicas;
 use App\Models\Fichastecnicasitens;
 use App\Models\Orcamentos;
 use App\Models\Produtos;
+use App\Models\TextoObservacaoExecucao;
+use App\Models\TextoOrcamentos;
 use Illuminate\Support\Facades\DB;
 
 class OrcamentosController extends Controller
@@ -77,6 +79,8 @@ class OrcamentosController extends Controller
 				'request' => $request,
                 'clientes' => (new ClientesController)->getAllCliente(),
                 'produtos' => $this->getAllProdutos(),
+                'textos_orcamentos' => $this->getAllTextoObservacoes(),
+                'textos_observacao_execucao' => $this->getAllTextoObservacoesExclusoes(),
 				'rotaIncluir' => 'incluir-orcamentos',
 				'rotaAlterar' => 'alterar-orcamentos'
 			);
@@ -110,6 +114,8 @@ class OrcamentosController extends Controller
                 'nome_tela' => 'Orçamentos',
 				'orcamentos'=> $orcamento,
                 'produtos' => $this->getAllProdutos(),
+                'textos_orcamentos' => $this->getAllTextoObservacoes(),
+                'textos_observacao_execucao' => $this->getAllTextoObservacoesExclusoes(),
 				'request' => $request,
 				'rotaIncluir' => '',
 				'rotaAlterar' => 'alterar-orcamentos',
@@ -143,14 +149,21 @@ class OrcamentosController extends Controller
         return $horaFormatada;
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
+
     public function getAllProdutos() {
         $Produtos = new Produtos();
         return $Produtos->where('status', '=', 'A')->get();
+
+    }
+    public function getAllTextoObservacoesExclusoes() {
+        $TextoObservacaoExecucao = new TextoObservacaoExecucao();
+        return $TextoObservacaoExecucao->where('status', '=', 'A')->get();
+
+    }
+
+    public function getAllTextoObservacoes() {
+        $TextoOrcamentos = new TextoOrcamentos();
+        return $TextoOrcamentos->where('status', '=', 'A')->get();
 
     }
 }
