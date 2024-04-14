@@ -155,4 +155,10 @@ class ClientesController extends Controller
         return $clientes->id;
 
 }
+
+public function getAllCliente() {
+    $Clientes = new Clientes();
+    return $Clientes->where('status', '=', 'A')->get();
+
+}
 }

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Fichastecnicas;
-use App\Models\Fichastecnicasitens;
-use App\Models\Materiais;
+use App\Models\Orcamentos;
+use App\Models\Produtos;
+use App\Models\TextoObservacaoExecucao;
+use App\Models\TextoOrcamentos;
+use App\Providers\DateHelpers;
 use Illuminate\Support\Facades\DB;
 
 class OrcamentosController extends Controller
@@ -27,33 +29,47 @@ class OrcamentosController extends Controller
      */
     public function index(Request $request)
     {
-        $id = !empty($request->input('id')) ? ($request->input('id')) : ( !empty($id) ? $id : false );
-        $ep = !empty($request->input('ep')) ? ($request->input('ep')) : ( !empty($ep) ? $ep : false );
-        $status_ = !empty($request->input('status')) ? ($request->input('status')) : ( !empty($status) ? $status : false );
 
-        $fichatecnicas = new Fichastecnicas();
 
-        if ($id) {
-        	$fichatecnicas = $fichatecnicas->where('id', '=', $id);
+
+        $orcamentos = new Orcamentos();
+
+        $orcamentos = DB::table('orcamentos')
+        ->join('status', 'orcamentos.status_id', '=', 'status.id')
+        ->join('clientes', 'clientes.id', '=', 'orcamentos.cliente_id')
+        ->select('orcamentos.id as orcamentos_id', 'orcamentos.created_at as data_gerado', 'clientes.id as cliente_id', 'clientes.nome_fantasia as nome_fantasia', 'status.nome as status_name')
+        ->limit(20);
+
+        if (!empty($request->input('id'))) {
+        	$orcamentos = $orcamentos->where('orcamentos.id', '=', $request->input('id'));
         }
 
-        if ($ep) {
-        	$fichatecnicas = $fichatecnicas->where('ep', '=', $ep);
+        if (!empty($request->input('orcamentos.status'))){
+            $orcamentos = $orcamentos->where('orcamentos.status', '=', $request->input('status'));
         }
 
-        if (!empty($request->input('status'))){
-            $fichatecnicas = $fichatecnicas->where('status', '=', $request->input('status'));
+        if(!empty($request->input('created_at')) && !empty($request->input('created_at_fim') )) {
+            $orcamentos = $orcamentos->whereBetween('orcamentos.created_at', [DateHelpers::formatDate_dmY($request->input('created_at')), DateHelpers::formatDate_dmY($request->input('created_at_fim'))]);
+        }
+        if(!empty($request->input('created_at')) && empty($request->input('created_at_fim') )) {
+            $orcamentos = $orcamentos->where('orcamentos.created_at', '>=', DateHelpers::formatDate_dmY($request->input('created_at')));
+        }
+        if(empty($request->input('created_at')) && !empty($request->input('created_at_fim') )) {
+            $orcamentos = $orcamentos->where('orcamentos.created_at', '<=', DateHelpers::formatDate_dmY($request->input('created_at_fim')));
         }
 
 
-        $fichatecnicas = $fichatecnicas->get();
+        $orcamentos = $orcamentos->get();
+        // dd($orcamentos);
         $tela = 'pesquisa';
     	$data = array(
 				'tela' => $tela,
                 'nome_tela' => 'orçamentos',
-				'fichatecnicas'=> $fichatecnicas,
+				'orcamentos'=> $orcamentos,
+                'produtos' => $this->getAllProdutos(),
+                'status_orcamento' => (new StatusController)->getAllStatus(),
 				'request' => $request,
-				'rotaIncluir' => 'incluir-fichatecnica',
+				'rotaIncluir' => 'incluir-orcamentos',
 				'rotaAlterar' => 'alterar-orcamentos'
 			);
 
@@ -67,7 +83,29 @@ class OrcamentosController extends Controller
      */
     public function incluir(Request $request)
     {
+        $metodo = $request->method();
 
+    	if ($metodo == 'POST') {
+    		$orcamentos_id = $this->salva($request);
+
+	    	return redirect()->route('orcamentos', [ 'id' => $orcamentos_id ] );
+
+    	}
+        $tela = 'incluir';
+    	$data = array(
+				'tela' => $tela,
+                'nome_tela' => 'orçamentos',
+				'request' => $request,
+                'clientes' => (new ClientesController)->getAllCliente(),
+                'produtos' => $this->getAllProdutos(),
+                'textos_orcamentos' => $this->getAllTextoObservacoes(),
+                'textos_observacao_execucao' => $this->getAllTextoObservacoesExclusoes(),
+                'status_orcamento' => (new StatusController)->getAllStatus(),
+				'rotaIncluir' => 'incluir-orcamentos',
+				'rotaAlterar' => 'alterar-orcamentos'
+			);
+
+        return view('orcamentos', $data);
     }
 
      /**
@@ -81,69 +119,28 @@ class OrcamentosController extends Controller
 
 		if ($metodo == 'POST') {
 
-    		$fichatecnica_id = $this->salva($request);
+    		$orcamento_id = $this->salva($request);
 
-	    	return redirect()->route('fichatecnica', [ 'id' => $fichatecnica_id ] );
+	    	return redirect()->route('orcamento', [ 'id' => $orcamento_id ] );
     	}
 
-        $fichatecnicas = new Fichastecnicas();
-        $fichatecnicasitens = new Fichastecnicasitens();
-        $pedidos = new PedidosController();
-        $consumoMateriais = new ConsumoMateriaisController();
+        $orcamentos = new Orcamentos();
 
-        $fichatecnica= $fichatecnicas->where('id', '=', $request->input('id'))->get();
-
-        $fichatecnicasitens= $fichatecnicasitens::with('tabelaMateriais')->where('fichatecnica_id', '=', $request->input('id'))->orderByRaw("CASE WHEN blank='' THEN 1 ELSE 0 END ASC")->orderBy('blank','ASC')->get();
-
-        $tempo_fresa_total = '00:00:00';
-
-        foreach ($fichatecnicasitens as $key => $fichatecnicasitem) {
-            $tempo_usinagem = $fichatecnicasitem->tempo_usinagem;
-            $tempo_usinagem = $pedidos->multiplyTimeByInteger($tempo_usinagem,$fichatecnicasitem->qtde_blank);
-            $tempo_fresa_total = $pedidos::somarHoras($tempo_fresa_total, $tempo_usinagem);
-        }
-
-        foreach ($fichatecnicasitens as $key => $fichatecnicasitem) {
-           
-            $tempo_usinagem = $fichatecnicasitem->tempo_usinagem;
-            $tempo_usinagem = $pedidos->multiplyTimeByInteger($tempo_usinagem,$fichatecnicasitem->qtde_blank);
-
-            $percentuais[$key]['percentual']=round($pedidos::calcularPorcentagemEntreMinutos($tempo_usinagem, $tempo_fresa_total));
-
-
-            $pecas = [
-                'width' => $fichatecnicasitem->medidax + 2,
-                'height'=> $fichatecnicasitem->mediday + 10,
-            ];
-
-            $chapa = [
-                'sheetWidth' => $fichatecnicasitem->tabelaMateriais->unidadex - 20,
-                'sheetHeight'=> $fichatecnicasitem->tabelaMateriais->unidadey - 20 
-            ];
-
-            if($fichatecnicasitem->tabelaMateriais->peca_padrao == 2){
-
-                $blank_por_chapa = $consumoMateriais->calculaPecas($pecas, $chapa);
-            } else {
-                
-                $blank_por_chapa = $fichatecnicasitem->qtde_blank;
-            }
-
-            $percentuais[$key]['blank_por_chapa'] = $blank_por_chapa;
-        }
+        $orcamento= $orcamentos->where('id', '=', $request->input('id'))->get();
 
         $tela = 'alterar';
     	$data = array(
 				'tela' => $tela,
-                'nome_tela' => 'ficha técnica',
-				'fichatecnicas'=> $fichatecnica,
-                'fichatecnicasitens' => $fichatecnicasitens,
+                'nome_tela' => 'Orçamentos',
+				'orcamentos'=> $orcamento,
+                'clientes' => (new ClientesController)->getAllCliente(),
+                'produtos' => $this->getAllProdutos(),
+                'textos_orcamentos' => $this->getAllTextoObservacoes(),
+                'textos_observacao_execucao' => $this->getAllTextoObservacoesExclusoes(),
+                'status_orcamento' => (new StatusController)->getAllStatus(),
 				'request' => $request,
-                'materiais' => $this->getAllMateriais(),
 				'rotaIncluir' => '',
-                'tempo_fresa_total' => $tempo_fresa_total,
 				'rotaAlterar' => 'alterar-orcamentos',
-                'percentuais' => $percentuais,
 			);
 
         return view('orcamentos', $data);
@@ -153,35 +150,56 @@ class OrcamentosController extends Controller
 
         DB::transaction(function () use ($request) {
 
+            $Orcamentos = new Orcamentos();
 
+            if($request->input('id')) {
+                $Orcamentos = $Orcamentos::find($request->input('id'));
+            }
+
+            $composicoes_orcamento = json_decode($request->input('composicoes'));
+            $Orcamentos->cliente_id = $request->input('cliente_id');
+            $Orcamentos->status_id = $request->input('status_id');
+            $Orcamentos->texto_orcamento = $request->input('texto_orcamento');
+            $Orcamentos->dados_json = json_encode($composicoes_orcamento);
+            $Orcamentos->observacoes_exclusoes = $request->input('observacoes_exclusoes');
+            $Orcamentos->prazo_execucao = $request->input('prazo_execucao');
+            $Orcamentos->garantia = $request->input('garantia');
+            $Orcamentos->exibir_valores_orcamento = $request->input('exibir_valores_orcamento');
+            $Orcamentos->descricao_valores = $request->input('descricao_valores');
+            $Orcamentos->condicoes_pagamentos = $request->input('condicoes_pagamentos');
+            $Orcamentos->dados_bancarios_pagamento = $request->input('dados_bancarios_pagamento');
+            $Orcamentos->status = $request->input('status');
+            $Orcamentos->save();
+
+            return $Orcamentos->id;
         });
     }
 
-/**
- * Transforma um numero inteiro em formato de 00:00:00
- */
-    function trataStringHora($numeroString) {
+    public function imprimir(Request $request)
+    {
+        $orcamentos = new Orcamentos();
+        $orcamentos = $orcamentos->where('id', '=', $request->input('id'))->get();
+        // $imprimirPDF = new PDFController();
+        //return $imprimirPDF->generatePDF($data, 'imprimir_orcamentos');
 
-        preg_match_all('/[0-9]/', $numeroString, $numerosEncontrados);
+        return view('imprimir_orcamentos', ['orcamentos' => $orcamentos]);
 
-        $numerosString = $numerosEncontrados ? implode('', $numerosEncontrados[0]) : '';
-
-        while (strlen($numerosString) < 6) {
-            $numerosString = '0' . $numerosString;
-        }
-        $horaFormatada = substr($numerosString, 0, 2) . ':' . substr($numerosString, 2, 2) . ':' . substr($numerosString, 4, 2);
-
-        return $horaFormatada;
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function getAllMateriais() {
-        $Materiais = new Materiais();
-        return $Materiais->where('status', '=', 'A')->get();
+    public function getAllProdutos() {
+        $Produtos = new Produtos();
+        return $Produtos->where('status', '=', 'A')->get();
+
+    }
+    public function getAllTextoObservacoesExclusoes() {
+        $TextoObservacaoExecucao = new TextoObservacaoExecucao();
+        return $TextoObservacaoExecucao->where('status', '=', 'A')->get();
+
+    }
+
+    public function getAllTextoObservacoes() {
+        $TextoOrcamentos = new TextoOrcamentos();
+        return $TextoOrcamentos->where('status', '=', 'A')->get();
 
     }
 }

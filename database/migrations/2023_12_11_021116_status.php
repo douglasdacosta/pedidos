@@ -24,17 +24,9 @@ return new class extends Migration
 
         DB::table('status')->insert(
             [
-                [ 'nome' => 'Imprimir', 'alertacliente' => 1, 'status' => 'A'],
-                [ 'nome' => 'Em Preparação', 'alertacliente' => 1, 'status' => 'A'],
-                [ 'nome' => 'Aguardando Material', 'alertacliente' => 1, 'status' => 'A'],
-                [ 'nome' => 'Usinagem', 'alertacliente' => 1, 'status' => 'A'],
-                [ 'nome' => 'Acabamento', 'alertacliente' => 1, 'status' => 'A'],
-                [ 'nome' => 'Montagem', 'alertacliente' => 1, 'status' => 'A'],
-                [ 'nome' => 'Inspeção', 'alertacliente' => 1, 'status' => 'A'],
-                [ 'nome' => 'Embalar', 'alertacliente' => 1, 'status' => 'A'],
-                [ 'nome' => 'Expedição', 'alertacliente' => 1, 'status' => 'A'],
-                [ 'nome' => 'Estoque   ', 'alertacliente' => 1, 'status' => 'A'],
-                [ 'nome' => 'Entregue', 'alertacliente' => 1, 'status' => 'A'],
+                [ 'nome' => 'Pendente', 'alertacliente' => 1, 'status' => 'A'],
+                [ 'nome' => 'Em analise', 'alertacliente' => 1, 'status' => 'A'],
+                [ 'nome' => 'Concluído', 'alertacliente' => 1, 'status' => 'A'],
 
             ]
         );

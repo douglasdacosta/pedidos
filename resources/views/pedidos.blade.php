@@ -736,12 +736,6 @@ $palheta_cores = [1 => '#ff003d', 2 => '#ee7e4c', 3 => '#8f639f', 4 => '#94c5a5'
                                 <tr>
                                     <td>{{ $pedido->nome_cliente }}</td>
                                     <td>{{ $pedido->nome_contato }}</td>
-                                    <td>{{ $pedido->os }}</td>
-                                    <td>{{ $pedido->nome_status }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($pedido->data_ultimo_historico)->format('d/m/Y') }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($pedido->data_entrega)->format('d/m/Y') }}</td>
-                                    <td class="{{ $class_dias_alerta }}">{{ $dias_alerta }}</td>
-                                    <td>{{ $pedido->email }}</td>
                                     <td>
                                         <input type="hidden" name="emails[]" value="{{ $pedido->id }}">
                                         <input type="checkbox" class="" checked value="{{ $pedido->id }}"

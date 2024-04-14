@@ -4,7 +4,7 @@
 <script src="../vendor/jquery/jquery.min.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="js/main_charts.js"></script>
+<!-- <script src="js/main_charts.js"></script> -->
 
 @section('content_header')
     <h1 class="m-0 text-dark">Home</h1>

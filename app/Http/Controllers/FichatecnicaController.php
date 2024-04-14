@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Fichastecnicas;
-use App\Models\Fichastecnicasitens;
-use App\Models\Materiais;
+use App\Models\Orcamentos;
+use App\Models\Produtos;
 use Illuminate\Support\Facades\DB;
 
 class FichatecnicaController extends Controller
@@ -31,7 +30,7 @@ class FichatecnicaController extends Controller
         $ep = !empty($request->input('ep')) ? ($request->input('ep')) : ( !empty($ep) ? $ep : false );
         $status_ = !empty($request->input('status')) ? ($request->input('status')) : ( !empty($status) ? $status : false );
 
-        $fichatecnicas = new Fichastecnicas();
+        $fichatecnicas = new Orcamentos();
 
         if ($id) {
         	$fichatecnicas = $fichatecnicas->where('id', '=', $id);
@@ -44,7 +43,6 @@ class FichatecnicaController extends Controller
         if (!empty($request->input('status'))){
             $fichatecnicas = $fichatecnicas->where('status', '=', $request->input('status'));
         }
-
 
         $fichatecnicas = $fichatecnicas->get();
         $tela = 'pesquisa';
@@ -80,7 +78,7 @@ class FichatecnicaController extends Controller
 				'tela' => $tela,
                 'nome_tela' => 'ficha técnica',
 				'request' => $request,
-				'materiais' => $this->getAllMateriais(),
+				'produtos' => (new OrcamentosController)->getAllProdutos(),
 				'rotaIncluir' => 'incluir-fichatecnica',
 				'rotaAlterar' => 'alterar-fichatecnica'
 			);
@@ -109,7 +107,7 @@ class FichatecnicaController extends Controller
 
         $fichatecnica= $fichatecnicas->where('id', '=', $request->input('id'))->get();
         $fichatecnicasitens= $fichatecnicasitens::with('materiais')->where('fichatecnica_id', '=', $request->input('id'))->orderByRaw("CASE WHEN blank='' THEN 1 ELSE 0 END ASC")->orderBy('blank','ASC')->get();
-        
+
         $tela = 'alterar';
     	$data = array(
 				'tela' => $tela,
@@ -129,45 +127,17 @@ class FichatecnicaController extends Controller
 
         DB::transaction(function () use ($request) {
 
-            $fichatecnicas = new Fichastecnicas();
+            $fichatecnicas = new Orcamentos();
             $Fichastecnicasitens = new Fichastecnicasitens();
             if($request->input('id')) {
                 $fichatecnicas = $fichatecnicas::find($request->input('id'));
                 $Fichastecnicasitens::where('fichatecnica_id', '=', $request->input('id'))->delete();
             }
-
             $fichatecnicas->ep = $request->input('ep');
-            $fichatecnicas->tempo_usinagem =  $request->input('soma_tempo_usinagem');
-            $fichatecnicas->tempo_acabamento =  $request->input('soma_tempo_acabamento');
-            $fichatecnicas->tempo_montagem =  $request->input('soma_tempo_montagem');
-            $fichatecnicas->tempo_inspecao =  $request->input('soma_tempo_inspecao');
-            $fichatecnicas->tempo_montagem_torre =  $request->input('soma_tempo_montagem_torre');
-            $fichatecnicas->alerta_usinagem1 =  $request->input('alerta_usinagem1');
-            $fichatecnicas->alerta_usinagem2 =  $request->input('alerta_usinagem2');
-            $fichatecnicas->alerta_usinagem3 =  $request->input('alerta_usinagem3');
-            $fichatecnicas->alerta_usinagem4 =  $request->input('alerta_usinagem4');
-            $fichatecnicas->alerta_usinagem5 =  $request->input('alerta_usinagem5');
-            $fichatecnicas->alerta_acabamento1 =  $request->input('alerta_acabamento1');
-            $fichatecnicas->alerta_acabamento2 =  $request->input('alerta_acabamento2');
-            $fichatecnicas->alerta_acabamento3 =  $request->input('alerta_acabamento3');
-            $fichatecnicas->alerta_acabamento4 =  $request->input('alerta_acabamento4');
-            $fichatecnicas->alerta_acabamento5 =  $request->input('alerta_acabamento5');
-            $fichatecnicas->alerta_montagem1 =  $request->input('alerta_montagem1');
-            $fichatecnicas->alerta_montagem2 =  $request->input('alerta_montagem2');
-            $fichatecnicas->alerta_montagem3 =  $request->input('alerta_montagem3');
-            $fichatecnicas->alerta_montagem4 =  $request->input('alerta_montagem4');
-            $fichatecnicas->alerta_montagem5 =  $request->input('alerta_montagem5');
-            $fichatecnicas->alerta_inspecao1 =  $request->input('alerta_inspecao1');
-            $fichatecnicas->alerta_inspecao2 =  $request->input('alerta_inspecao2');
-            $fichatecnicas->alerta_inspecao3 =  $request->input('alerta_inspecao3');
-            $fichatecnicas->alerta_inspecao4 =  $request->input('alerta_inspecao4');
-            $fichatecnicas->alerta_inspecao5 =  $request->input('alerta_inspecao5');
-            $fichatecnicas->alerta_expedicao1 =  $request->input('alerta_expedicao1');
-            $fichatecnicas->alerta_expedicao2 =  $request->input('alerta_expedicao2');
-            $fichatecnicas->alerta_expedicao3 =  $request->input('alerta_expedicao3');
-            $fichatecnicas->alerta_expedicao4 =  $request->input('alerta_expedicao4');
-            $fichatecnicas->alerta_expedicao5 =  $request->input('alerta_expedicao5');            
-            $fichatecnicas->status = $request->input('status');
+            $fichatecnicas->material_id =  $request->input('material_id');
+            $fichatecnicas->unid =  $request->input('unid');
+            $fichatecnicas->qtd =  $request->input('qtd');
+            $fichatecnicas->status = 'A';
             $fichatecnicas->save();
 
             $composicoes = json_decode($request->input('composicoes'));
@@ -179,21 +149,13 @@ class FichatecnicaController extends Controller
                     $dados[$key1][$key] =$value_array[$key];
                 }
             }
-
             foreach ($dados as $key => $dado) {
 
-                $inserts[] =[
+                    $inserts[] =[
                     'fichatecnica_id' => $fichatecnicas->id,
                     'materiais_id'=> $dado['material_id'],
-                    'blank'=> isset($dado['blank']) ? $dado['blank'] : null ,
-                    'qtde_blank'=> $dado['qtde'],
-                    'medidax'=> !empty($dado['medidax']) ? $dado['medidax'] : null ,
-                    'mediday'=> !empty($dado['mediday']) ? $dado['mediday'] : null ,
-                    'tempo_usinagem'=> !empty($dado['tempo_usinagem']) ? $this->trataStringHora($dado['tempo_usinagem']) : null ,
-                    'tempo_acabamento'=> !empty($dado['tempo_acabamento']) ? $this->trataStringHora($dado['tempo_acabamento']) : null ,
-                    'tempo_montagem'=> !empty($dado['tempo_montagem']) ? $this->trataStringHora($dado['tempo_montagem']) : null ,
-                    'tempo_montagem_torre'=> isset($dado['tempo_montagem_torre']) ? $this->trataStringHora($dado['tempo_montagem_torre']) : null ,
-                    'tempo_inspecao'=> !empty($dado['tempo_inspecao']) ? $this->trataStringHora($dado['tempo_inspecao']) : null ,
+                    'blank'=> isset($dado['material_id']) ? $dado['material_id'] : null ,
+                    'qtde_blank'=> $dado['qtd'],
                     'status' => 'A',
                 ];
             }
@@ -224,9 +186,9 @@ class FichatecnicaController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function getAllMateriais() {
-        $Materiais = new Materiais();
-        return $Materiais->where('status', '=', 'A')->get();
+    public function getAllProdutos() {
+        $produtos = new Produtos();
+        return $produtos->where('status', '=', 'A')->get();
 
     }
 }

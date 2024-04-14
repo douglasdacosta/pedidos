@@ -59,6 +59,12 @@
                       <th style="width: 10%;">Preço</th>
                       <th style="width: 10%;">Categoria</th>
                       <th style="width: 10%;">Descrição</th>
+                      <th style="width: 10%;">Sistema</th>
+                      <th style="width: 10%;">Fabricante</th>
+                      <th style="width: 10%;">Código</th>
+                      <th style="width: 10%;">Qtde</th>
+                      <th style="width: 10%;">Preço Unitário</th>
+                      <th style="width: 10%;">FAT</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -70,8 +76,14 @@
                                 <td>{{$produto->preco}}</td>
                                 <td>{{$produto->nome_categoria}}</td>
                                 <td>{{$produto->descricao}}</td>
+                                <td>{{$produto->sistema}}</td>
+                                <td>{{$produto->fabricante}}</td>
+                                <td>{{$produto->codigo}}</td>
+                                <td>{{$produto->quantidade}}</td>
+                                <td>{{$produto->precounitario}}</td>
+                                <td>{{$produto->fat}}</td>
                             </tr>
-                        @endforeach
+                            @endforeach
                     @endif
                   </tbody>
                 </table>
@@ -106,8 +118,78 @@
             <div class="form-group row">
                 <label for="produtos" class="col-sm-2 col-form-label">Nome</label>
                 <div class="col-sm-6">
-                <input type="text" class="form-control is-invalid" required id="produtos"  name="nome"  value="@if (isset($produtos[0]->nome)){{$produtos[0]->nome}}@else{{''}}@endif">
+                <input type="text" class="form-control" id="nome"  name="nome"  value="@if (isset($produtos[0]->nome)){{$produtos[0]->nome}}@else{{''}}@endif">
                 </div>
+            </div>
+            <div class="form-group row">
+                <label for="produtos" class="col-sm-2 col-form-label">Preço</label>
+                <div class="col-sm-1">
+                <input type="text" class="form-control" id="preco"  name="preco"  value="@if (isset($produtos[0]->preco)){{$produtos[0]->preco}}@else{{''}}@endif">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="blank" class="col-sm-2 col-form-label">Categorias*</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="categorias_id" name="categorias_id">
+                        <option value=""></option>
+                        @if (isset($categorias))
+                            @foreach ($categorias as $categoria)
+                                <option value="{{ $categoria->id }}" @if (isset($produtos[0]->categorias_id) && $produtos[0]->categorias_id == $categoria->id) selected="selected" @else{{ '' }} @endif>
+                                    {{ $categoria->id . ' - ' . $categoria->nome }}
+                                </option>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="produtos" class="col-sm-2 col-form-label">Descrição</label>
+                <div class="col-sm-6">
+                <input type="text" class="form-control" id="descricao"  name="descricao"  value="@if (isset($produtos[0]->descricao)){{$produtos[0]->descricao}}@else{{''}}@endif">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="produtos" class="col-sm-2 col-form-label">Sistema</label>
+                <div class="col-sm-6">
+                <input type="text" class="form-control" id="sistema"  name="sistema"  value="@if (isset($produtos[0]->sistema)){{$produtos[0]->sistema}}@else{{''}}@endif">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="produtos" class="col-sm-2 col-form-label">Fabricante</label>
+                <div class="col-sm-6">
+                <input type="text" class="form-control" id="fabricante"  name="fabricante"  value="@if (isset($produtos[0]->fabricante)){{$produtos[0]->fabricante}}@else{{''}}@endif">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="produtos" class="col-sm-2 col-form-label">Código</label>
+                <div class="col-sm-1">
+                <input type="text" class="form-control" id="codigo"  name="codigo"  value="@if (isset($produtos[0]->codigo)){{$produtos[0]->codigo}}@else{{''}}@endif">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="produtos" class="col-sm-2 col-form-label">Quantidade</label>
+                <div class="col-sm-1">
+                <input type="text" class="form-control" id="quantidade"  name="quantidade"  value="@if (isset($produtos[0]->quantidade)){{$produtos[0]->quantidade}}@else{{''}}@endif">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="produtos" class="col-sm-2 col-form-label">Preço Unitário</label>
+                <div class="col-sm-1">
+                <input type="text" class="form-control" id="precounitario"  name="precounitario"  value="@if (isset($produtos[0]->precounitario)){{$produtos[0]->precounitario}}@else{{''}}@endif">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="produtos" class="col-sm-2 col-form-label">FAT</label>
+                <div class="col-sm-2">
+                <input type="text" class="form-control" id="fat"  name="fat"  value="@if (isset($produtos[0]->fat)){{$produtos[0]->fat}}@else{{''}}@endif">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="status" class="col-sm-2 col-form-label"></label>
+                <select class="form-control col-md-1" id="status" name="status">
+                    <option value="A" @if (isset($produtos[0]->status) && $produtos[0]->status == 'A'){{ ' selected '}}@else @endif>Ativo</option>
+                    <option value="I" @if (isset($produtos[0]->status) && $produtos[0]->status =='I'){{ ' selected '}}@else @endif>Inativo</option>
+                </select>
             </div>
             <div class="form-group row">
                 <div class="col-sm-5">
