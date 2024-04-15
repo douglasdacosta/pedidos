@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Clientes;
 use Illuminate\Http\Request;
 use App\Models\Orcamentos;
 use App\Models\Produtos;
@@ -121,7 +122,7 @@ class OrcamentosController extends Controller
 
     		$orcamento_id = $this->salva($request);
 
-	    	return redirect()->route('orcamento', [ 'id' => $orcamento_id ] );
+	    	return redirect()->route('orcamentos', [ 'id' => $orcamento_id ] );
     	}
 
         $orcamentos = new Orcamentos();
@@ -177,12 +178,40 @@ class OrcamentosController extends Controller
 
     public function imprimir(Request $request)
     {
-        $orcamentos = new Orcamentos();
-        $orcamentos = $orcamentos->where('id', '=', $request->input('id'))->get();
-        // $imprimirPDF = new PDFController();
-        //return $imprimirPDF->generatePDF($data, 'imprimir_orcamentos');
 
-        return view('imprimir_orcamentos', ['orcamentos' => $orcamentos]);
+        $mes_extenso = array(
+            '01' => 'Janeiro',
+            '02' => 'Fevereiro',
+            '03' => 'Marco',
+            '04' => 'Abril',
+            '05' => 'Maio',
+            '06' => 'Junho',
+            '07' => 'Julho',
+            '08' => 'Agosto',
+            '09' => 'Novembro',
+            '10' => 'Setembro',
+            '11' => 'Outubro',
+            '12' => 'Dezembro'
+        );
+
+        $orcamentos = new Orcamentos();
+        $clientes = new Clientes();
+
+        $orcamentos = $orcamentos->where('id', '=', $request->input('id'))->get()->toarray();
+
+        $clientes = $clientes->where('id','=',$orcamentos[0]['cliente_id'])->get();
+
+        $clientes = $clientes[0];
+        $imprimirPDF = new PDFController();
+        $orcamentos = [
+            'orcamentos' => $orcamentos[0],
+            'data_descricao' =>  "São Paulo, ".date('d'). ' de '. $mes_extenso[date('m')] . ' de ' .date('Y'),
+            'responsavel' => "Ao " . $clientes->nome_fantasia ."\n ". $clientes->endereco . ", Nº ".$clientes->endereco. ", " . $clientes->cidade."/".$clientes->estado  ." \n A/c: $clientes->nome_responsavel"
+        ];
+
+        return $imprimirPDF->generatePDF($orcamentos, 'imprimir_orcamentos');
+
+        return view('imprimir_orcamentos', $orcamentos);
 
     }
 
