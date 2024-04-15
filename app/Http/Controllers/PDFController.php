@@ -19,7 +19,7 @@ class PDFController extends Controller
      public function generatePDF($data, $view, $type ='view')
      {
         if($type == 'view') {
-            $pdf = PDF::loadView($view, $data)->setPaper('a4', 'landscape');
+            $pdf = PDF::loadView($view, $data)->setPaper('a4', 'portrait');
             return $pdf->stream('ordendeservico.pdf');
 
         } else{
