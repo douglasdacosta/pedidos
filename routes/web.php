@@ -30,6 +30,7 @@ Route::match(['get', 'post'],'/incluir-categorias', [App\Http\Controllers\Catego
 Route::match(['get', 'post'],'/produtos', [App\Http\Controllers\ProdutosController::class, 'index'])->name('produtos');
 Route::match(['get', 'post'],'/alterar-produtos', [App\Http\Controllers\ProdutosController::class, 'alterar'])->name('alterar-produtos');
 Route::match(['get', 'post'],'/incluir-produtos', [App\Http\Controllers\ProdutosController::class, 'incluir'])->name('incluir-produtos');
+Route::match(['get', 'post'],'/ajax-orcamentos-produtos', [App\Http\Controllers\ProdutosController::class, 'consultaProdutos'])->name('ajax-orcamentos-produtos');
 
 Route::match(['get', 'post'],'/clientes', [App\Http\Controllers\ClientesController::class, 'index'])->name('clientes');
 Route::match(['get', 'post'],'/alterar-clientes', [App\Http\Controllers\ClientesController::class, 'alterar'])->name('alterar-clientes');
@@ -47,5 +48,6 @@ Route::match(['get', 'post'],'/orcamentos', [App\Http\Controllers\OrcamentosCont
 Route::match(['get', 'post'],'/incluir-orcamentos', [App\Http\Controllers\OrcamentosController::class, 'incluir'])->name('incluir-orcamentos');
 Route::match(['get', 'post'],'/alterar-orcamentos', [App\Http\Controllers\OrcamentosController::class, 'alterar'])->name('alterar-orcamentos');
 Route::match(['get',],'/imprimir-orcamentos', [App\Http\Controllers\OrcamentosController::class, 'imprimir'])->name('imprimir-orcamentos');
+Route::match(['get', 'post'],'/ajax-orcamentos-texto_exclusao', [App\Http\Controllers\OrcamentosController::class, 'consultaTextoExclusao'])->name('ajax-orcamentos-texto_exclusao');
 
 Route::match(['get', 'post'],'/teste', [App\Http\Controllers\TestesController::class, 'index'])->name('teste');

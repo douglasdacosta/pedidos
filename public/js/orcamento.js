@@ -13,28 +13,74 @@ $(function () {
 
 
 
+    $("#addTextoExclusao").click(function () {
+
+        id = $('#textos_obs_exec option:selected').val();
+
+        observacoes_exclusoes = $('#observacoes_exclusoes').val();
+
+        $.ajax({
+            type: "POST",
+            url: '/ajax-orcamentos-texto_exclusao',
+            data: {
+                "id": id,
+                "texto": observacoes_exclusoes,
+                "_token": $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (data) {
+                $('#observacoes_exclusoes').val('');
+
+                $('#observacoes_exclusoes').val(data);
+
+            },
+            error: function (data, textStatus, errorThrown) {
+                alert('Erro na consulta');
+            },
+
+        });
+
+    })
     $("#addComposicao").click(function () {
 
-        if ($('#qtde').val().trim() == '') {
-            abreAlert('O campo  Qtde' + texto);
-            $('#qtde').focus();
-            return false;
-        }
+        produto = $('#produto').val();
+        qtde = $('#qtde').val();
 
-        $('#table_composicao tbody').append(
-            '<tr class="produto_id_'+$('#produto option:selected').val() + '">' +
-                '<td data-name="produto_id" class="codigo" scope="row">'+$('#produto option:selected').val()+'</td>' +
-                '<td data-name="categoria" class="" scope="row">Ar</td>' +
-                '<td data-name="produto" class="" scope="row">'+$('#produto option:selected').text()+'</td>' +
-                '<td data-name="descricao" class="" scope="row">Ventilação</td>' +
-                '<td data-name="unidade" class="" scope="row">vb</td>' +
-                '<td data-name="preco_unitario" class="" scope="row">1500,00</td>' +
-                '<td data-name="quantidade" class="" scope="row">1</td>' +
-                '<td><button type="button" class="close" aria-label="Close" data-codigoproduto="produto_id_'+$('#produto option:selected').val() + '">' +
-                    '<span aria-hidden="true">&times;</span>' +
-                    '</button>' +
-                '</td>' +
-            '</tr>');
+        $.ajax({
+            type: "POST",
+            url: '/ajax-orcamentos-produtos',
+            data: {
+                "produto": produto,
+                "_token": $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (data) {
+
+                id = data.id != null ? data.id : '';
+                nome_categoria = data.nome_categoria!= null ? data.nome_categoria : '';
+                nome = data.nome!= null ? data.nome : '';
+                descricao = data.descricao!= null ? data.descricao : '';
+                unidade_medida = data.unidade_medida != null ? data.unidade_medida : '';
+                precounitario = data.precounitario != null ? data.precounitario.replace('.', ",") : '';
+                $('#table_composicao tbody').append(
+                    '<tr class="produto_id_'+data.id+'">' +
+                        '<td data-name="produto_id" class="codigo" scope="row">'+ id + '</td>' +
+                        '<td data-name="categoria" class="" scope="row">'+ nome_categoria + '</td>' +
+                        '<td data-name="produto" class="" scope="row">'+ nome + '</td>' +
+                        '<td data-name="descricao" class="" scope="row">'+ descricao +'</td>' +
+                        '<td data-name="unidade" class="" scope="row">'+ unidade_medida + '</td>' +
+                        '<td data-name="preco_unitario" class="" scope="row">'+ precounitario +'</td>' +
+                        '<td data-name="quantidade" class="" scope="row">'+qtde+'</td>' +
+                        '<td><button type="button" class="close" aria-label="Close" data-codigoproduto="produto_id_'+id+'">' +
+                            '<span aria-hidden="true">&times;</span>' +
+                            '</button>' +
+                        '</td>' +
+                    '</tr>');
+
+            },
+            error: function (data, textStatus, errorThrown) {
+                alert('Erro na consulta');
+            },
+
+        });
         bloqueiaEP();
         });
 
@@ -79,6 +125,8 @@ $(function () {
         }, 1000);
     });
 
+
+    $
 
 }); //fim ready
 

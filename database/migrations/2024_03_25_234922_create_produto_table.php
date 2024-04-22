@@ -13,12 +13,10 @@ class CreateProdutoTable extends Migration
             $table->id();
             $table->string('nome', 255);
             $table->text('descricao')->nullable();
-            $table->decimal('preco', 10, 2)->nullable();
             $table->unsignedBigInteger('categorias_id')->nullable();
             $table->foreign('categorias_id')->references('id')->on('categorias')->onDelete('set null');
             $table->string('fabricante', 100)->nullable();
             $table->string('codigo', 50)->nullable();
-            $table->integer('quantidade')->nullable();
             $table->decimal('precounitario', 10, 2)->nullable();
             $table->string('fat', 50)->nullable();
             $table->string('moeda', 10)->nullable();
@@ -27,7 +25,6 @@ class CreateProdutoTable extends Migration
             $table->decimal('percentualdesconto', 5, 2)->nullable();
             $table->string('sistema', 50)->nullable();
             $table->string('unidade_medida')->nullable();;
-            $table->decimal('preco_unitario')->nullable();;
             $table->string('status')->nullable();
             $table->timestamps();
         });
@@ -43,7 +40,7 @@ class CreateProdutoTable extends Migration
                 ['nome' => 'Chapa Alumínio #22', 'categorias_id' => 1, 'status' => 'A'],
                 ['nome' => 'Chapa Alumínio #20', 'categorias_id' => 1, 'status' => 'A'],
                 ['nome' => 'Chapa Inox 304', 'categorias_id' => 1, 'status' => 'A'],
-                ['nome' => 'Isolamento em manta de lã de vidro 38 mm', 'categorias_id' => 1, 'status' => 'A'], 
+                ['nome' => 'Isolamento em manta de lã de vidro 38 mm', 'categorias_id' => 1, 'status' => 'A'],
                 ['nome' => 'Isolamento em manta cerâmica 38 mm e densidade de 96 kg/m³', 'categorias_id' => 1, 'status' => 'A'],
                 ['nome' => 'Acessórios (Cantoneira em chapa / Barra roscada 3/8" / perfilado 38 x 38 mm / fita aluminizada)', 'categorias_id' => 1, 'status' => 'A'],
                 ['nome' => 'Canto TDC + Porcas + Parafusor', 'categorias_id' => 1, 'status' => 'A'],
@@ -53,7 +50,7 @@ class CreateProdutoTable extends Migration
                 ['nome' => 'Pintura', 'categorias_id' => 1, 'status' => 'A'],
             ]
         );
-        
+
     }
 
     public function down()

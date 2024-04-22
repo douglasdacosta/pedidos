@@ -56,13 +56,12 @@
                     <tr>
                       <th style="width: 10%;">ID</th>
                       <th style="width: 20%;">Nome</th>
-                      <th style="width: 10%;">Preço</th>
                       <th style="width: 10%;">Categoria</th>
                       <th style="width: 10%;">Descrição</th>
                       <th style="width: 10%;">Sistema</th>
                       <th style="width: 10%;">Fabricante</th>
                       <th style="width: 10%;">Código</th>
-                      <th style="width: 10%;">Qtde</th>
+                      <th style="width: 10%;">Unidade</th>
                       <th style="width: 10%;">Preço Unitário</th>
                       <th style="width: 10%;">FAT</th>
                     </tr>
@@ -73,14 +72,13 @@
                             <tr>
                                 <th scope="row"><a href={{ URL::route($rotaAlterar, array('id' => $produto->id )) }}>{{$produto->id}}</a></th>
                                 <td>{{$produto->nome}}</td>
-                                <td>{{$produto->preco}}</td>
                                 <td>{{$produto->nome_categoria}}</td>
                                 <td>{{$produto->descricao}}</td>
                                 <td>{{$produto->sistema}}</td>
                                 <td>{{$produto->fabricante}}</td>
                                 <td>{{$produto->codigo}}</td>
-                                <td>{{$produto->quantidade}}</td>
-                                <td>{{$produto->precounitario}}</td>
+                                <td>{{$produto->unidade_medida}}</td>
+                                <td>{{number_format($produto->precounitario, 2, ',', '')}}</td>
                                 <td>{{$produto->fat}}</td>
                             </tr>
                             @endforeach
@@ -116,19 +114,13 @@
         @endif
             @csrf <!--{{ csrf_field() }}-->
             <div class="form-group row">
-                <label for="produtos" class="col-sm-2 col-form-label">Nome</label>
+                <label for="nome" class="col-sm-2 col-form-label">Nome</label>
                 <div class="col-sm-6">
                 <input type="text" class="form-control" id="nome"  name="nome"  value="@if (isset($produtos[0]->nome)){{$produtos[0]->nome}}@else{{''}}@endif">
                 </div>
             </div>
-            <div class="form-group row">
-                <label for="produtos" class="col-sm-2 col-form-label">Preço</label>
-                <div class="col-sm-1">
-                <input type="text" class="form-control" id="preco"  name="preco"  value="@if (isset($produtos[0]->preco)){{$produtos[0]->preco}}@else{{''}}@endif">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="blank" class="col-sm-2 col-form-label">Categorias*</label>
+              <div class="form-group row">
+                <label for="categorias_id" class="col-sm-2 col-form-label">Categorias*</label>
                 <div class="col-sm-4">
                     <select class="form-control" id="categorias_id" name="categorias_id">
                         <option value=""></option>
@@ -143,43 +135,43 @@
                 </div>
             </div>
             <div class="form-group row">
-                <label for="produtos" class="col-sm-2 col-form-label">Descrição</label>
+                <label for="descricao" class="col-sm-2 col-form-label">Descrição</label>
                 <div class="col-sm-6">
                 <input type="text" class="form-control" id="descricao"  name="descricao"  value="@if (isset($produtos[0]->descricao)){{$produtos[0]->descricao}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="produtos" class="col-sm-2 col-form-label">Sistema</label>
+                <label for="sistema" class="col-sm-2 col-form-label">Sistema</label>
                 <div class="col-sm-6">
                 <input type="text" class="form-control" id="sistema"  name="sistema"  value="@if (isset($produtos[0]->sistema)){{$produtos[0]->sistema}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="produtos" class="col-sm-2 col-form-label">Fabricante</label>
+                <label for="fabricante" class="col-sm-2 col-form-label">Fabricante</label>
                 <div class="col-sm-6">
                 <input type="text" class="form-control" id="fabricante"  name="fabricante"  value="@if (isset($produtos[0]->fabricante)){{$produtos[0]->fabricante}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="produtos" class="col-sm-2 col-form-label">Código</label>
+                <label for="codigo" class="col-sm-2 col-form-label">Código</label>
                 <div class="col-sm-1">
                 <input type="text" class="form-control" id="codigo"  name="codigo"  value="@if (isset($produtos[0]->codigo)){{$produtos[0]->codigo}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="produtos" class="col-sm-2 col-form-label">Quantidade</label>
+                <label for="unidade_medida" class="col-sm-2 col-form-label">Unidade medida</label>
                 <div class="col-sm-1">
-                <input type="text" class="form-control" id="quantidade"  name="quantidade"  value="@if (isset($produtos[0]->quantidade)){{$produtos[0]->quantidade}}@else{{''}}@endif">
+                <input type="text" class="form-control" id="unidade_medida"  name="unidade_medida"  value="@if (isset($produtos[0]->unidade_medida)){{$produtos[0]->unidade_medida}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="produtos" class="col-sm-2 col-form-label">Preço Unitário</label>
+                <label for="precounitario" class="col-sm-2 col-form-label">Preço Unitário</label>
                 <div class="col-sm-1">
-                <input type="text" class="form-control" id="precounitario"  name="precounitario"  value="@if (isset($produtos[0]->precounitario)){{$produtos[0]->precounitario}}@else{{''}}@endif">
+                <input type="text" class="form-control mask_valor" id="precounitario"  name="precounitario"  value="@if (isset($produtos[0]->precounitario)){{ number_format($produtos[0]->precounitario,2, ',', '')}}@else{{''}}@endif">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="produtos" class="col-sm-2 col-form-label">FAT</label>
+                <label for="fat" class="col-sm-2 col-form-label">FAT</label>
                 <div class="col-sm-2">
                 <input type="text" class="form-control" id="fat"  name="fat"  value="@if (isset($produtos[0]->fat)){{$produtos[0]->fat}}@else{{''}}@endif">
                 </div>

@@ -171,7 +171,8 @@
     <div class="col-sm-6">
         <textarea class="form-control" id="texto_orcamento" name="texto_orcamento">
 @if (isset($orcamentos[0]->texto_orcamento))
-{{ trim($orcamentos[0]->texto_orcamento) }}@else{{ '' }}
+{{ trim($orcamentos[0]->texto_orcamento) }}@else{{ 'Segue nossa proposta para instalação dos sistemas ventilação e exaustão elaborada de acordo com projeto
+enviado.' }}
 @endif
 </textarea>
     </div>
@@ -248,16 +249,13 @@
         <i class="fas fa-2x fa-sync-alt fa-spin"></i>
     </div>
     <div class="col-sm-2">
-        <button type="button" id="addComposicao" class="btn btn-success">Adicionar</button>
+        <button type="button" id="addTextoExclusao" class="btn btn-success">Adicionar</button>
     </div>
 </div>
 <div class="form-group row">
     <label for="observacoes_exclusoes" class="col-sm-2 col-form-label text-right text-sm-end">Observações e Exclusões</label>
     <div class="col-sm-6">
-        <textarea class="form-control" id="observacoes_exclusoes" name="observacoes_exclusoes">
-@if (isset($orcamentos[0]->observacoes_exclusoes))
-{{ trim($orcamentos[0]->observacoes_exclusoes) }}@else{{ '' }}
-@endif
+        <textarea class="form-control" id="observacoes_exclusoes" name="observacoes_exclusoes">@if (isset($orcamentos[0]->observacoes_exclusoes)){{ trim($orcamentos[0]->observacoes_exclusoes) }}@else{{ '' }}@endif
 </textarea>
     </div>
 </div>

@@ -176,6 +176,23 @@ class OrcamentosController extends Controller
         });
     }
 
+    public function consultaTextoExclusao(Request $request) {
+
+        $id_texto = $request->input('id');
+        $texto = $request->input('texto');
+
+        $texto_novo =  $this->getAllTextoObservacoesExclusoesByID($id_texto);
+
+        if(trim($texto) != '') {
+            $texto_novo = trim($texto) . "\r\n" . $texto_novo[0]['texto_completo'];
+        } else {
+            $texto_novo = $texto_novo[0]['texto_completo'];
+        }
+
+        return response($texto_novo);
+    }
+
+
     public function imprimir(Request $request)
     {
 
@@ -226,9 +243,18 @@ class OrcamentosController extends Controller
 
     }
 
+    public function getAllTextoObservacoesExclusoesByID($id) {
+        $TextoObservacaoExecucao = new TextoObservacaoExecucao();
+        $TextoObservacaoExecucao = $TextoObservacaoExecucao->where('id', '=', $id);
+        return $TextoObservacaoExecucao->where('status', '=', 'A')->get();
+
+
+    }
+
     public function getAllTextoObservacoes() {
         $TextoOrcamentos = new TextoOrcamentos();
         return $TextoOrcamentos->where('status', '=', 'A')->get();
 
     }
+
 }

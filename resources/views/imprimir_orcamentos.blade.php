@@ -95,7 +95,7 @@
                 <div class="col-sm-12">
                     <h5>Observações e Exclusões</h5>
                     <p class="col-sm-12 text-bold" >
-                        {{$orcamentos['observacoes_exclusoes']}}
+                        {!! nl2br($orcamentos['observacoes_exclusoes']) !!}
                     </p>
                 </div>
             </div>
@@ -103,7 +103,7 @@
                 <div class="col-sm-12">
                     <h5>Prazo de Execução</h5>
                     <p class="col-sm-12 text-bold" >
-                        {{$orcamentos['prazo_execucao']}}
+                        {!! nl2br($orcamentos['prazo_execucao']) !!}
                     </p>
                 </div>
             </div>

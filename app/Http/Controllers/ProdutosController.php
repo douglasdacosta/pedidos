@@ -8,6 +8,7 @@ use App\Models\Materiais;
 use App\Models\Produtos;
 use App\Providers\DateHelpers;
 use Illuminate\Support\Facades\DB;
+use Laravel\Sail\Console\PublishCommand;
 
 class ProdutosController extends Controller
 {
@@ -114,8 +115,10 @@ class ProdutosController extends Controller
 			);
 
         return view('produtos', $data);
+
     }
     public function salva($request, $historico = null) {
+
 
         $produtos = new Produtos();
         if(!empty($request->input('id'))) {
@@ -123,20 +126,36 @@ class ProdutosController extends Controller
         }
         $produtos->nome = $request->input('nome');
         $produtos->descricao = $request->input('descricao');
-        $produtos->preco = $request->input('preco');
         $produtos->categorias_id = $request->input('categorias_id');
         $produtos->fabricante = $request->input('fabricante');
         $produtos->codigo = $request->input('codigo');
-        $produtos->quantidade = $request->input('quantidade');
-        $produtos->precounitario = $request->input('precounitario');
+        $produtos->unidade_medida = $request->input('unidade_medida');
+        $produtos->precounitario = $request->input('precounitario') != '' ? DateHelpers::formatFloatValue($request->input('precounitario')) : null;
         $produtos->fat = $request->input('fat');
         $produtos->moeda = $request->input('moeda');
-        $produtos->origempreco = $request->input('origempreco');
-        $produtos->totaladotado = $request->input('totaladotado');
+        $produtos->origempreco = $request->input('origempreco') != '' ? DateHelpers::formatFloatValue($request->input('origempreco')) : null;
+        $produtos->totaladotado = $request->input('totaladotado') != '' ? DateHelpers::formatFloatValue($request->input('totaladotado')) : null;
         $produtos->percentualdesconto = $request->input('percentualdesconto');
         $produtos->sistema = $request->input('sistema');
         $produtos->status = $request->input('status');
         $produtos->save();
         return $produtos->id;
     }
+
+    public function consultaProdutos(Request $request) {
+
+
+        $produtos = DB::table('produtos')
+            ->join('categorias', 'categorias.id', '=', 'produtos.categorias_id')
+            ->select('produtos.*', 'categorias.nome as nome_categoria')
+            ->where('produtos.id', '=', $request->input('produto'))
+            ->where('produtos.status', '=', 'A')
+            ->orderby('produtos.id')
+            ->get();
+
+
+
+        return $produtos[0];
+    }
+
 }
