@@ -6,9 +6,6 @@
 @section('content')
     <div class="contenedor" >
         <div id="orcamentos_impressao" >
-            <img class="logo_fundo"
-            style="opacity: 0.1; position: absolute; left: 5%; top: 15%; width: 100%; z-index: 0;"
-            src='data:image/png;base64,{{ base64_encode(file_get_contents(public_path('imagens/Logo_fundo.png')))}}' />
         </div>
         <div class="form-group row">
             <table>
@@ -40,11 +37,6 @@
 
                 </p>
             </div>
-        </div>
-        <div id="orcamentos_impressao" >
-            <img class="logo_fundo"
-            style="opacity: 0.3; position: absolute; left: 5%; top: 120%; width: 100%; z-index: 0;"
-            src='data:image/png;base64,{{ base64_encode(file_get_contents(public_path('imagens/Logo_fundo.png')))}}' />
         </div>
         <div class="form-group row">
                 <table class="table table-striped table-sm text-center">
@@ -95,7 +87,7 @@
                 <div class="col-sm-12">
                     <h5>Observações e Exclusões</h5>
                     <p class="col-sm-12 text-bold" >
-                        {!! nl2br($orcamentos['observacoes_exclusoes']) !!}
+                        {{$orcamentos['observacoes_exclusoes']}}
                     </p>
                 </div>
             </div>
@@ -103,7 +95,7 @@
                 <div class="col-sm-12">
                     <h5>Prazo de Execução</h5>
                     <p class="col-sm-12 text-bold" >
-                        {!! nl2br($orcamentos['prazo_execucao']) !!}
+                        {{$orcamentos['prazo_execucao']}}
                     </p>
                 </div>
             </div>
