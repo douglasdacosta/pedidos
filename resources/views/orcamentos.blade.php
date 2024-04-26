@@ -82,11 +82,6 @@
                                     <th>Impressão</th>
                                 </tr>
                             </thead>
-                            {{-- +"orcamentos_id": 1
-                            +"data_gerado": "2024-04-14 16:25:56"
-                            +"cliente_id": 1
-                            +"nome_fantasia": "4million"
-                            +"status_name": "Pendente" --}}
                             <tbody>
                                 @if (isset($orcamentos))
                                     @foreach ($orcamentos as $orcamento)
@@ -98,7 +93,7 @@
                                             <td scope="row">{{$orcamento->status_name}}</td>
                                             <td scope="row">{{ Carbon\Carbon::parse($orcamento->data_gerado)->format('d/m/Y')}}</td>
                                             <th scope="row">
-                                                <a href="{{ URL::route('imprimir-orcamentos', ['id' => $orcamento->orcamentos_id]) }}" <span
+                                                <a target="_blank" href="{{ URL::route('imprimir-orcamentos', ['id' => $orcamento->orcamentos_id]) }}" <span
                                                     class="fa fa-print"></span></a>
                                             </th>
                                         </tr>

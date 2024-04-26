@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app_impressao')
 
 {{-- <link rel="stylesheet" href="{{asset('css/orcamento.css')}}" /> --}}
 <link rel="stylesheet" href="{{public_path('css/orcamento.css')}}" />
