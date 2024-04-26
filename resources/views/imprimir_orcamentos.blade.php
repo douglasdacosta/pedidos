@@ -44,41 +44,19 @@
                         <tr class="table-primary">
                             <th>ID</th>
                             <th>Descrição dos Itens</th>
-                            <th>Cliente</th>
                             <th>Unidade</th>
                             <th>Valor</th>
                         </tr>
                         </thead>
-                        @foreach ([1,2,3,4,5,6,7,8,9] as $item)
+                        @foreach ($composicao as $item)
 
                         <tr>
-                            <td>1</td>
-                            <td>Equipamentos</td>
-                            <td>Rosa Maria</td>
-                            <td>vb</td>
-                            <td>1,00</td>
+                            <td>{{$item[0]['produto_id']}}</td>
+                            <td>{{$item[2]['produto']}}</td>
+                            <td>{{$item[4]['unidade']}}</td>
+                            <td>{{$item[5]['preco_unitario']}}</td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Ventilador centrífugo com vazão de 23.620 m³/h - 180 mmCA</td>
-                            <td>Rosa Maria</td>
-                            <td>vb</td>
-                            <td>12,00</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Coifa de ar convencional, com dimensão de 90 x 90 x 50 cm</td>
-                            <td>Rosa Maria</td>
-                            <td>vb</td>
-                            <td>21,00</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Fancoil com capacidade de 7,5 TR's</td>
-                            <td>Rosa Maria</td>
-                            <td>vb</td>
-                            <td>331,00</td>
-                        </tr>
+
                         @endforeach
                     </tbody>
                 </table>
@@ -112,14 +90,16 @@
                     </p>
                 </div>
             </div>
-            <div class="form-group row">
-                <div class="col-sm-12">
-                    <h5>Descrição dos Valores</h5>
-                    <p class="col-sm-12 text-bold" >
-                        {!! nl2br($orcamentos['descricao_valores']) !!}
-                    </p>
+            @if($orcamentos['exibir_valores_orcamento'] == 1)
+                <div class="form-group row">
+                    <div class="col-sm-12">
+                        <h5>Descrição dos Valores</h5>
+                        <p class="col-sm-12 text-bold" >
+                            {!! nl2br($orcamentos['descricao_valores']) !!}
+                        </p>
+                    </div>
                 </div>
-            </div>
+            @endif
             <div class="form-group row">
                 <div class="col-sm-12">
                     <h5>Condições de Pagamento</h5>

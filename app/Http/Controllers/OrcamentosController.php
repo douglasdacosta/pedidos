@@ -129,11 +129,22 @@ class OrcamentosController extends Controller
 
         $orcamento= $orcamentos->where('id', '=', $request->input('id'))->get();
 
+        $jsonObj = json_decode($orcamento[0]['dados_json'], true);
+
+        $jsonObj = json_decode($jsonObj['composicaoep'], true);
+
+        $composicao = array_map(function($item){
+            return array_map(function($innerItem){
+                return json_decode($innerItem, true);
+            }, $item);
+        }, $jsonObj);
+
         $tela = 'alterar';
     	$data = array(
 				'tela' => $tela,
                 'nome_tela' => 'Orçamentos',
 				'orcamentos'=> $orcamento,
+				'composicao'=> $composicao,
                 'clientes' => (new ClientesController)->getAllCliente(),
                 'produtos' => $this->getAllProdutos(),
                 'textos_orcamentos' => $this->getAllTextoObservacoes(),
@@ -152,7 +163,7 @@ class OrcamentosController extends Controller
         DB::transaction(function () use ($request) {
 
             $Orcamentos = new Orcamentos();
-
+            // dd($request->input());
             if($request->input('id')) {
                 $Orcamentos = $Orcamentos::find($request->input('id'));
             }
@@ -215,13 +226,25 @@ class OrcamentosController extends Controller
         $clientes = new Clientes();
 
         $orcamentos = $orcamentos->where('id', '=', $request->input('id'))->get()->toarray();
-
         $clientes = $clientes->where('id','=',$orcamentos[0]['cliente_id'])->get();
 
         $clientes = $clientes[0];
         $imprimirPDF = new PDFController();
+
+        $jsonObj = json_decode($orcamentos[0]['dados_json'], true);
+
+        $jsonObj = json_decode($jsonObj['composicaoep'], true);
+
+        $composicao = array_map(function($item){
+            return array_map(function($innerItem){
+                return json_decode($innerItem, true);
+            }, $item);
+        }, $jsonObj);
+
+
         $orcamentos = [
             'orcamentos' => $orcamentos[0],
+            'composicao' => $composicao,
             'data_descricao' =>  "São Paulo, ".date('d'). ' de '. $mes_extenso[date('m')] . ' de ' .date('Y'),
             'responsavel' => "Ao " . $clientes->nome_fantasia ."\n ". $clientes->endereco . ", Nº ".$clientes->endereco. ", " . $clientes->cidade."/".$clientes->estado  ." \n A/c: $clientes->nome_responsavel"
         ];

@@ -222,9 +222,25 @@ enviado.' }}
         </thead>
         <tbody>
 
-            @if (isset($orcamentos))
-                @foreach ($orcamentos as $orcamento)
-                @endforeach
+            @if (isset($composicao))
+            @foreach ($composicao as $item)
+
+                <tr class="produto_id_{{$item[0]['produto_id']}}">
+                    <td data-name="produto_id" class="codigo" scope="row">{{$item[0]['produto_id']}}</td>
+                    <td data-name="categoria" class="" scope="row">{{$item[1]['categoria']}}</td>
+                    <td data-name="produto" class="" scope="row">{{$item[2]['produto']}}</td>
+                    <td data-name="descricao" class="" scope="row">{{$item[3]['descricao']}}</td>
+                    <td data-name="unidade" class="" scope="row">{{$item[4]['unidade']}}</td>
+                    <td data-name="preco_unitario" class="" scope="row">{{$item[5]['preco_unitario']}}</td>
+                    <td data-name="quantidade" class="" scope="row">{{$item[6]['quantidade']}}</td>
+                    <td>
+                        <button type="button" class="close" aria-label="Close" data-codigoproduto="{{'produto_id_' . $item[0]['produto_id']}}">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </td>
+                </tr>
+
+            @endforeach
             @endif
         </tbody>
     </table>
@@ -270,19 +286,19 @@ enviado.' }}
 <div class="form-group row">
     <label for="garantia" class="col-sm-2 col-form-label text-right text-sm-end">Garantia</label>
     <select class="form-control col-md-8" id="garantia" name="garantia">
-        <option value="1" @if (isset($orcamento[0]->garantia) && $orcamento[0]->garantia == '1') {{ ' selected ' }}@else @endif>Todos os nossos serviços e materiais terão direito a garantia de 01 (um) ano contra defeitos de
+        <option value="1" @if (isset($orcamentos[0]->garantia) && $orcamentos[0]->garantia == '1') {{ ' selected ' }}@else @endif>Todos os nossos serviços e materiais terão direito a garantia de 01 (um) ano contra defeitos de
             fabricação e instalação, exceto àqueles que apresentarem falhas ou falta de manutenção.</option>
-        <option value="2" @if (isset($orcamento[0]->garantia) && $orcamento[0]->garantia == '2') {{ ' selected ' }}@else @endif>Todos os nossos serviços e materiais terão direito a garantia de 03 (três) meses contra defeitos de
+        <option value="2" @if (isset($orcamentos[0]->garantia) && $orcamentos[0]->garantia == '2') {{ ' selected ' }}@else @endif>Todos os nossos serviços e materiais terão direito a garantia de 03 (três) meses contra defeitos de
             fabricação e instalação, exceto aqueles existentes ou que apresentarem falhas ou falta de
             manutenção</option>
     </select>
 </div>
 <hr class="my-3">
 <div class="form-group row">
-    <label for="exibir_valores_orcamento" class="col-sm-2 col-form-label text-right text-sm-end">Exibir valores no orçamento</label>
+    <label for="exibir_valores_orcamento" class="col-sm-2 col-form-label text-right text-sm-end">Exibir valores no orçamento </label>
     <select class="form-control col-md-2" id="exibir_valores_orcamento" name="exibir_valores_orcamento">
-        <option value="1" @if (isset($orcamento[0]->garantia) && $orcamento[0]->garantia == '1') {{ ' selected ' }}@else @endif>Sim</option>
-        <option value="2" @if (isset($orcamento[0]->garantia) && $orcamento[0]->garantia == '2') {{ ' selected ' }}@else @endif>Não</option>
+        <option value="1" @if (isset($orcamentos[0]->exibir_valores_orcamento) && $orcamentos[0]->exibir_valores_orcamento == '1') {{ ' selected ' }}@else @endif>Sim</option>
+        <option value="2" @if (isset($orcamentos[0]->exibir_valores_orcamento) && $orcamentos[0]->exibir_valores_orcamento == '2') {{ ' selected ' }}@else @endif>Não</option>
     </select>
 </div>
     <div class="form-group row">
