@@ -251,7 +251,7 @@ class OrcamentosController extends Controller
 
         return $imprimirPDF->generatePDF($orcamentos, 'imprimir_orcamentos');
 
-        return view('imprimir_orcamentos', $orcamentos);
+        // return view('imprimir_orcamentos', $orcamentos);
 
     }
 
