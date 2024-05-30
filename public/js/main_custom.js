@@ -83,7 +83,7 @@ $(function ($) {
         var status = $(this).val();
         $.ajax({
             type: "POST",
-            url: '/alterar-pedidos-ajax',
+            url: '/pedidos/public/alterar-pedidos-ajax',
             data: {
                 'id': pedido,
                 'status': status,
@@ -133,7 +133,7 @@ $(function ($) {
 
         $.ajax({
             "type": "POST",
-            "url": '/calcular-orcamento-ajax',
+            "url": '/pedidos/public/calcular-orcamento-ajax',
             "data": {
                 "tipo": tipo,
                 "dados": composicaoep,

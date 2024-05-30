@@ -21,7 +21,7 @@ $(function () {
 
         $.ajax({
             type: "POST",
-            url: '/ajax-orcamentos-texto_exclusao',
+            url: '/pedidos/public/ajax-orcamentos-texto_exclusao',
             data: {
                 "id": id,
                 "texto": observacoes_exclusoes,
@@ -47,7 +47,7 @@ $(function () {
 
         $.ajax({
             type: "POST",
-            url: '/ajax-orcamentos-produtos',
+            url: '/pedidos/public/ajax-orcamentos-produtos',
             data: {
                 "produto": produto,
                 "_token": $('meta[name="csrf-token"]').attr('content')
