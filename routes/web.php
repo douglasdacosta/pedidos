@@ -43,11 +43,13 @@ Route::match(['get', 'post'],'/incluir-status', [App\Http\Controllers\StatusCont
 Route::match(['get', 'post'],'/pedidos', [App\Http\Controllers\PedidosController::class, 'index'])->name('pedidos');
 Route::match(['get', 'post'],'/alterar-pedidos', [App\Http\Controllers\PedidosController::class, 'alterar'])->name('alterar-pedidos');
 Route::match(['get', 'post'],'/incluir-pedidos', [App\Http\Controllers\PedidosController::class, 'incluir'])->name('incluir-pedidos');
+Route::match(['get', 'post'],'/alterar-pedidos-ajax', [App\Http\Controllers\PedidosController::class, 'ajaxAlterar'])->name('alterar-pedidos-ajax');
 
 Route::match(['get', 'post'],'/orcamentos', [App\Http\Controllers\OrcamentosController::class, 'index'])->name('orcamentos');
 Route::match(['get', 'post'],'/incluir-orcamentos', [App\Http\Controllers\OrcamentosController::class, 'incluir'])->name('incluir-orcamentos');
 Route::match(['get', 'post'],'/alterar-orcamentos', [App\Http\Controllers\OrcamentosController::class, 'alterar'])->name('alterar-orcamentos');
 Route::match(['get',],'/imprimir-orcamentos', [App\Http\Controllers\OrcamentosController::class, 'imprimir'])->name('imprimir-orcamentos');
 Route::match(['get', 'post'],'/ajax-orcamentos-texto_exclusao', [App\Http\Controllers\OrcamentosController::class, 'consultaTextoExclusao'])->name('ajax-orcamentos-texto_exclusao');
+Route::match(['get', 'post'],'/calcular-orcamento-ajax', [App\Http\Controllers\AjaxOrcamentosController::class, 'ajaxCalculaOrcamentos'])->name('calcular-orcamento-ajax');
 
 Route::match(['get', 'post'],'/teste', [App\Http\Controllers\TestesController::class, 'index'])->name('teste');
